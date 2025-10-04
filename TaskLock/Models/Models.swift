@@ -39,13 +39,12 @@ extension Task {
     @NSManaged public var title: String
     @NSManaged public var notes: String?
     @NSManaged public var dueDate: Date?
-    @NSManaged public var reminders: [Date]
     @NSManaged public var priorityRawValue: String
     @NSManaged public var estimateMinutes: Int32
     @NSManaged public var isCompleted: Bool
     @NSManaged public var createdAt: Date
     @NSManaged public var updatedAt: Date
-    @NSManaged public var category: Category?
+    @NSManaged public var categoryName: String?
     
     public var priority: TaskPriority {
         get { TaskPriority(rawValue: priorityRawValue) ?? .medium }
@@ -66,8 +65,8 @@ extension Task {
         return !isCompleted && (isDueToday || isOverdue)
     }
     
-    public var categoryName: String {
-        return category?.name ?? "Uncategorized"
+    public var categoryDisplayName: String {
+        return categoryName ?? "Uncategorized"
     }
 }
 
@@ -87,30 +86,6 @@ extension Category {
     @NSManaged public var color: String
     @NSManaged public var icon: String
     @NSManaged public var createdAt: Date
-    @NSManaged public var tasks: NSSet?
-    
-    public var taskCount: Int {
-        return tasks?.count ?? 0
-    }
-    
-    public var completedTaskCount: Int {
-        guard let tasks = tasks as? Set<Task> else { return 0 }
-        return tasks.filter { $0.isCompleted }.count
-    }
-}
-
-extension Category {
-    @objc(addTasksObject:)
-    @NSManaged public func addToTasks(_ value: Task)
-    
-    @objc(removeTasksObject:)
-    @NSManaged public func removeFromTasks(_ value: Task)
-    
-    @objc(addTasks:)
-    @NSManaged public func addToTasks(_ values: NSSet)
-    
-    @objc(removeTasks:)
-    @NSManaged public func removeFromTasks(_ values: NSSet)
 }
 
 // MARK: - Task Preset Model
@@ -155,7 +130,6 @@ extension DailyAggregate {
     @NSManaged public var tasksCompleted: Int32
     @NSManaged public var tasksDue: Int32
     @NSManaged public var focusTimeMinutes: Int32
-    @NSManaged public var categoryBreakdown: [String: Int32]
     @NSManaged public var createdAt: Date
     @NSManaged public var updatedAt: Date
     

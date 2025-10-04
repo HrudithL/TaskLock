@@ -29,8 +29,7 @@ public class TaskManager: ObservableObject {
         task.title = title
         task.notes = notes
         task.dueDate = dueDate
-        task.reminders = reminders
-        task.category = category
+        task.categoryName = category?.name
         task.priority = priority
         task.estimateMinutes = estimateMinutes
         task.isCompleted = false
@@ -114,7 +113,7 @@ public class TaskManager: ObservableObject {
     }
     
     public func fetchTasksByCategory(_ category: Category) -> [Task] {
-        let predicate = NSPredicate(format: "category == %@", category)
+        let predicate = NSPredicate(format: "categoryName == %@", category.name)
         return fetchTasks(predicate: predicate)
     }
     
@@ -218,14 +217,8 @@ public class TaskManager: ObservableObject {
     private func scheduleNotifications(for task: Task) {
         guard !task.isCompleted else { return }
         
-        for reminderDate in task.reminders {
-            notificationManager.scheduleTaskReminder(
-                taskId: task.id.uuidString,
-                title: task.title,
-                body: task.notes ?? "Task reminder",
-                date: reminderDate
-            )
-        }
+        // For now, we'll skip reminders since we removed the reminders array
+        // This can be implemented later with a separate Reminder entity if needed
     }
     
     private func cancelNotifications(for task: Task) {
