@@ -230,6 +230,7 @@
 				1A0000380000000000000001 /* CategoryViews.swift in Sources */,
 				1A00003A0000000000000001 /* AnalyticsViews.swift in Sources */,
 				1A00003C0000000000000001 /* SettingsViews.swift in Sources */,
+		1A00003E0000000000000001 /* BlockingOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

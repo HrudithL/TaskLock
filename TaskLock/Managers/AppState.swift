@@ -17,7 +17,7 @@ public class AppState: ObservableObject {
     @Published public var isBlocking: Bool = false
     
     private let persistenceController: PersistenceController
-    private let taskManager: TaskManager
+    public let taskManager: TaskManager
     private let blockingManager: BlockingManager
     private let policyEngine: PolicyEngine
     public let analyticsManager: AnalyticsManager

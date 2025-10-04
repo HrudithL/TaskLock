@@ -217,14 +217,15 @@ struct EditTaskView: View {
     }
     
     private func saveTask() {
-        task.title = title
-        task.notes = notes.isEmpty ? nil : notes
-        task.dueDate = hasDueDate ? dueDate : nil
-        task.categoryName = selectedCategory?.name
-        task.priority = priority
-        task.estimateMinutes = estimateMinutes
+        var updatedTask = task
+        updatedTask.title = title
+        updatedTask.notes = notes.isEmpty ? nil : notes
+        updatedTask.dueDate = hasDueDate ? dueDate : nil
+        updatedTask.categoryName = selectedCategory?.name
+        updatedTask.priority = priority
+        updatedTask.estimateMinutes = estimateMinutes
         
-        appState.updateTask(task)
+        appState.updateTask(updatedTask)
         dismiss()
     }
 }

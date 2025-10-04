@@ -25,7 +25,7 @@ public enum TaskPriority: String, CaseIterable, Codable {
 }
 
 // MARK: - Task Model
-public struct Task: Identifiable, Codable, Hashable {
+public struct Task: Identifiable, Hashable {
     public let id: UUID
     public var title: String
     public var notes: String?
@@ -81,7 +81,7 @@ public struct Task: Identifiable, Codable, Hashable {
 }
 
 // MARK: - Category Model
-public struct Category: Identifiable, Codable, Hashable {
+public struct Category: Identifiable, Hashable {
     public let id: UUID
     public var name: String
     public var color: String
@@ -104,7 +104,7 @@ public struct Category: Identifiable, Codable, Hashable {
 }
 
 // MARK: - Task Preset Model
-public struct TaskPreset: Identifiable, Codable {
+public struct TaskPreset: Identifiable, Hashable {
     public let id: UUID
     public var title: String
     public var notes: String?
@@ -136,7 +136,7 @@ public struct TaskPreset: Identifiable, Codable {
 }
 
 // MARK: - Daily Aggregate Model
-public struct DailyAggregate: Identifiable, Codable {
+public struct DailyAggregate: Identifiable, Hashable {
     public let id: UUID
     public var date: Date
     public var tasksCompleted: Int32

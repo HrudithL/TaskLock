@@ -115,9 +115,9 @@ public class BlockingManager: ObservableObject {
         // Block all apps except allowed ones
         if !profile.allowedApps.isEmpty {
             // For now, we'll block all apps since we don't have a way to get all apps
-            managedSettingsStore.application.blockedApplications = Set<ApplicationToken>()
+            managedSettingsStore.application.blockedApplications = Set<Application>()
         } else {
-            managedSettingsStore.application.blockedApplications = Set<ApplicationToken>()
+            managedSettingsStore.application.blockedApplications = Set<Application>()
         }
         
         // Block websites if needed
@@ -167,7 +167,7 @@ public class BlockingManager: ObservableObject {
     }
     
     public func getAllApps() -> [ApplicationToken] {
-        return Set<ApplicationToken>()
+        return Array<ApplicationToken>()
     }
     
     // MARK: - Default Profiles
