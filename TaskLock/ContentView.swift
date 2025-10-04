@@ -17,7 +17,7 @@ struct ContentView: View {
             
             Spacer()
             
-            Text("Coming soon...")
+            Text("Build Test - v1.0")
                 .font(.title2)
                 .foregroundColor(.secondary)
             
