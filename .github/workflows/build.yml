@@ -82,7 +82,7 @@ jobs:
         ls -la ./build/
                    
     - name: Upload IPA Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: TaskLock.ipa
         path: ./build/TaskLock.ipa
