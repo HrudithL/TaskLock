@@ -39,12 +39,18 @@ jobs:
                    -destination 'generic/platform=iOS' \
                    clean build \
                    CODE_SIGNING_ALLOWED=NO \
-                   -quiet
+                   -derivedDataPath ./DerivedData
                    
     - name: Find built app
       run: |
         echo "Looking for built app..."
         echo "Build output structure:"
+        echo "=== DerivedData directory ==="
+        ls -la ./DerivedData/ || echo "No DerivedData directory"
+        find ./DerivedData -path "*/Build/Products/*" -type d || echo "No Build/Products in DerivedData"
+        find ./DerivedData -name "*.app" -type d || echo "No .app files in DerivedData"
+        
+        echo "=== Root directory ==="
         find . -path "*/Build/Products/*" -type d || echo "No Build/Products found"
         find . -name "*.app" -type d || echo "No .app files found"
         
@@ -52,6 +58,7 @@ jobs:
           echo "✓ App built successfully!"
         else
           echo "✗ No app found"
+          echo "Build may have failed silently"
           exit 1
         fi
         
@@ -59,7 +66,10 @@ jobs:
       run: |
         echo "Creating IPA..."
         # Look for .app files in common build locations
-        APP_PATH=$(find . -path "*/Build/Products/Release-iphoneos/*.app" -type d | head -1)
+        APP_PATH=$(find ./DerivedData -path "*/Build/Products/Release-iphoneos/*.app" -type d | head -1)
+        if [ -z "$APP_PATH" ]; then
+          APP_PATH=$(find . -path "*/Build/Products/Release-iphoneos/*.app" -type d | head -1)
+        fi
         if [ -z "$APP_PATH" ]; then
           APP_PATH=$(find . -name "*.app" -type d | head -1)
         fi
@@ -67,7 +77,9 @@ jobs:
         if [ -z "$APP_PATH" ]; then
           echo "No .app file found"
           echo "Searching in common locations..."
+          find ./DerivedData -name "*.app" -type d
           find . -name "*.app" -type d
+          find ./DerivedData -path "*/Build/Products/*" -type d
           find . -path "*/Build/Products/*" -type d
           exit 1
         fi
