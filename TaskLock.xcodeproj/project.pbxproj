@@ -27,7 +27,6 @@
 		1A00003A0000000000000001 /* AnalyticsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000390000000000000001 /* AnalyticsViews.swift */; };
 		1A00003C0000000000000001 /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00003B0000000000000001 /* SettingsViews.swift */; };
 		1A00003E0000000000000001 /* BlockingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00003D0000000000000001 /* BlockingOverlay.swift */; };
-		1A0000400000000000000001 /* TaskLockModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1A00003F0000000000000001 /* TaskLockModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,7 +53,6 @@
 		1A0000390000000000000001 /* AnalyticsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViews.swift; sourceTree = "<group>"; };
 		1A00003B0000000000000001 /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
 		1A00003D0000000000000001 /* BlockingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockingOverlay.swift; sourceTree = "<group>"; };
-		1A00003F0000000000000001 /* TaskLockModel.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaskLockModel.xcdatamodeld; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,7 +94,6 @@
 			isa = PBXGroup;
 			children = (
 				1A00001F0000000000000001 /* Models.swift */,
-				1A00003F0000000000000001 /* TaskLockModel.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -233,8 +230,6 @@
 				1A0000380000000000000001 /* CategoryViews.swift in Sources */,
 				1A00003A0000000000000001 /* AnalyticsViews.swift in Sources */,
 				1A00003C0000000000000001 /* SettingsViews.swift in Sources */,
-				1A00003E0000000000000001 /* BlockingOverlay.swift in Sources */,
-				1A0000400000000000000001 /* TaskLockModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

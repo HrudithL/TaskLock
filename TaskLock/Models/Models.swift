@@ -1,5 +1,5 @@
 import Foundation
-import CoreData
+import SwiftUI
 
 // MARK: - Task Priority Enum
 public enum TaskPriority: String, CaseIterable, Codable {
@@ -25,30 +25,40 @@ public enum TaskPriority: String, CaseIterable, Codable {
 }
 
 // MARK: - Task Model
-@objc(Task)
-public class Task: NSManagedObject {
+public struct Task: Identifiable, Codable {
+    public let id: UUID
+    public var title: String
+    public var notes: String?
+    public var dueDate: Date?
+    public var priority: TaskPriority
+    public var estimateMinutes: Int32
+    public var isCompleted: Bool
+    public var createdAt: Date
+    public var updatedAt: Date
+    public var categoryName: String?
     
-}
-
-extension Task {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Task> {
-        return NSFetchRequest<Task>(entityName: "Task")
-    }
-    
-    @NSManaged public var id: UUID
-    @NSManaged public var title: String
-    @NSManaged public var notes: String?
-    @NSManaged public var dueDate: Date?
-    @NSManaged public var priorityRawValue: String
-    @NSManaged public var estimateMinutes: Int32
-    @NSManaged public var isCompleted: Bool
-    @NSManaged public var createdAt: Date
-    @NSManaged public var updatedAt: Date
-    @NSManaged public var categoryName: String?
-    
-    public var priority: TaskPriority {
-        get { TaskPriority(rawValue: priorityRawValue) ?? .medium }
-        set { priorityRawValue = newValue.rawValue }
+    public init(
+        id: UUID = UUID(),
+        title: String,
+        notes: String? = nil,
+        dueDate: Date? = nil,
+        priority: TaskPriority = .medium,
+        estimateMinutes: Int32 = 30,
+        isCompleted: Bool = false,
+        createdAt: Date = Date(),
+        updatedAt: Date = Date(),
+        categoryName: String? = nil
+    ) {
+        self.id = id
+        self.title = title
+        self.notes = notes
+        self.dueDate = dueDate
+        self.priority = priority
+        self.estimateMinutes = estimateMinutes
+        self.isCompleted = isCompleted
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.categoryName = categoryName
     }
     
     public var isOverdue: Bool {
@@ -71,67 +81,87 @@ extension Task {
 }
 
 // MARK: - Category Model
-@objc(Category)
-public class Category: NSManagedObject {
+public struct Category: Identifiable, Codable {
+    public let id: UUID
+    public var name: String
+    public var color: String
+    public var icon: String
+    public var createdAt: Date
     
-}
-
-extension Category {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Category> {
-        return NSFetchRequest<Category>(entityName: "Category")
+    public init(
+        id: UUID = UUID(),
+        name: String,
+        color: String = "blue",
+        icon: String = "folder",
+        createdAt: Date = Date()
+    ) {
+        self.id = id
+        self.name = name
+        self.color = color
+        self.icon = icon
+        self.createdAt = createdAt
     }
-    
-    @NSManaged public var id: UUID
-    @NSManaged public var name: String
-    @NSManaged public var color: String
-    @NSManaged public var icon: String
-    @NSManaged public var createdAt: Date
 }
 
 // MARK: - Task Preset Model
-@objc(TaskPreset)
-public class TaskPreset: NSManagedObject {
+public struct TaskPreset: Identifiable, Codable {
+    public let id: UUID
+    public var title: String
+    public var notes: String?
+    public var category: String
+    public var priority: TaskPriority
+    public var estimateMinutes: Int32
+    public var createdAt: Date
+    public var updatedAt: Date
     
-}
-
-extension TaskPreset {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<TaskPreset> {
-        return NSFetchRequest<TaskPreset>(entityName: "TaskPreset")
-    }
-    
-    @NSManaged public var id: UUID
-    @NSManaged public var title: String
-    @NSManaged public var notes: String?
-    @NSManaged public var category: String
-    @NSManaged public var priorityRawValue: String
-    @NSManaged public var estimateMinutes: Int32
-    @NSManaged public var createdAt: Date
-    @NSManaged public var updatedAt: Date
-    
-    public var priority: TaskPriority {
-        get { TaskPriority(rawValue: priorityRawValue) ?? .medium }
-        set { priorityRawValue = newValue.rawValue }
+    public init(
+        id: UUID = UUID(),
+        title: String,
+        notes: String? = nil,
+        category: String = "Personal",
+        priority: TaskPriority = .medium,
+        estimateMinutes: Int32 = 30,
+        createdAt: Date = Date(),
+        updatedAt: Date = Date()
+    ) {
+        self.id = id
+        self.title = title
+        self.notes = notes
+        self.category = category
+        self.priority = priority
+        self.estimateMinutes = estimateMinutes
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
     }
 }
 
 // MARK: - Daily Aggregate Model
-@objc(DailyAggregate)
-public class DailyAggregate: NSManagedObject {
+public struct DailyAggregate: Identifiable, Codable {
+    public let id: UUID
+    public var date: Date
+    public var tasksCompleted: Int32
+    public var tasksDue: Int32
+    public var focusTimeMinutes: Int32
+    public var createdAt: Date
+    public var updatedAt: Date
     
-}
-
-extension DailyAggregate {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<DailyAggregate> {
-        return NSFetchRequest<DailyAggregate>(entityName: "DailyAggregate")
+    public init(
+        id: UUID = UUID(),
+        date: Date,
+        tasksCompleted: Int32 = 0,
+        tasksDue: Int32 = 0,
+        focusTimeMinutes: Int32 = 0,
+        createdAt: Date = Date(),
+        updatedAt: Date = Date()
+    ) {
+        self.id = id
+        self.date = date
+        self.tasksCompleted = tasksCompleted
+        self.tasksDue = tasksDue
+        self.focusTimeMinutes = focusTimeMinutes
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
     }
-    
-    @NSManaged public var id: UUID
-    @NSManaged public var date: Date
-    @NSManaged public var tasksCompleted: Int32
-    @NSManaged public var tasksDue: Int32
-    @NSManaged public var focusTimeMinutes: Int32
-    @NSManaged public var createdAt: Date
-    @NSManaged public var updatedAt: Date
     
     public var completionRate: Double {
         guard tasksDue > 0 else { return 0.0 }

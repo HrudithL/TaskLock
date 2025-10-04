@@ -1,14 +1,13 @@
 import Foundation
-import CoreData
 import UserNotifications
 
 // MARK: - Task Manager
 public class TaskManager: ObservableObject {
-    private let persistenceController: PersistenceController
+    private let dataStore: SimpleDataStore
     private let notificationManager = NotificationManager.shared
     
-    public init(persistenceController: PersistenceController) {
-        self.persistenceController = persistenceController
+    public init(dataStore: SimpleDataStore) {
+        self.dataStore = dataStore
     }
     
     // MARK: - Task CRUD Operations
@@ -22,21 +21,17 @@ public class TaskManager: ObservableObject {
         priority: TaskPriority = .medium,
         estimateMinutes: Int32 = 30
     ) -> Task {
-        let context = persistenceController.container.viewContext
-        let task = Task(context: context)
+        let task = Task(
+            title: title,
+            notes: notes,
+            dueDate: dueDate,
+            priority: priority,
+            estimateMinutes: estimateMinutes,
+            categoryName: category?.name
+        )
         
-        task.id = UUID()
-        task.title = title
-        task.notes = notes
-        task.dueDate = dueDate
-        task.categoryName = category?.name
-        task.priority = priority
-        task.estimateMinutes = estimateMinutes
-        task.isCompleted = false
-        task.createdAt = Date()
-        task.updatedAt = Date()
-        
-        saveContext()
+        dataStore.tasks.append(task)
+        dataStore.save()
         
         // Schedule notifications
         scheduleNotifications(for: task)
@@ -45,118 +40,125 @@ public class TaskManager: ObservableObject {
     }
     
     public func updateTask(_ task: Task) {
-        task.updatedAt = Date()
-        saveContext()
-        
-        // Reschedule notifications
-        cancelNotifications(for: task)
-        scheduleNotifications(for: task)
+        if let index = dataStore.tasks.firstIndex(where: { $0.id == task.id }) {
+            var updatedTask = task
+            updatedTask.updatedAt = Date()
+            dataStore.tasks[index] = updatedTask
+            dataStore.save()
+            
+            // Reschedule notifications
+            cancelNotifications(for: task)
+            scheduleNotifications(for: updatedTask)
+        }
     }
     
     public func completeTask(_ task: Task) {
-        task.isCompleted = true
-        task.updatedAt = Date()
-        saveContext()
-        
-        // Cancel notifications
-        cancelNotifications(for: task)
-        
-        // Update analytics
-        updateDailyAggregate(for: task)
+        if let index = dataStore.tasks.firstIndex(where: { $0.id == task.id }) {
+            var completedTask = task
+            completedTask.isCompleted = true
+            completedTask.updatedAt = Date()
+            dataStore.tasks[index] = completedTask
+            dataStore.save()
+            
+            // Cancel notifications
+            cancelNotifications(for: task)
+            
+            // Update analytics
+            updateDailyAggregate(for: completedTask)
+        }
     }
     
     public func deleteTask(_ task: Task) {
         // Cancel notifications
         cancelNotifications(for: task)
         
-        persistenceController.container.viewContext.delete(task)
-        saveContext()
+        dataStore.tasks.removeAll { $0.id == task.id }
+        dataStore.save()
     }
     
     // MARK: - Fetch Requests
     
-    public func fetchTasks(predicate: NSPredicate? = nil, sortDescriptors: [NSSortDescriptor] = []) -> [Task] {
-        let request: NSFetchRequest<Task> = Task.fetchRequest()
-        request.predicate = predicate
-        request.sortDescriptors = sortDescriptors.isEmpty ? [NSSortDescriptor(keyPath: \Task.dueDate, ascending: true)] : sortDescriptors
+    public func fetchTasks(predicate: ((Task) -> Bool)? = nil, sortDescriptors: [((Task, Task) -> Bool)] = []) -> [Task] {
+        var tasks = dataStore.tasks
         
-        do {
-            return try persistenceController.container.viewContext.fetch(request)
-        } catch {
-            print("Error fetching tasks: \(error)")
-            return []
+        if let predicate = predicate {
+            tasks = tasks.filter(predicate)
         }
+        
+        if !sortDescriptors.isEmpty {
+            tasks.sort { task1, task2 in
+                for descriptor in sortDescriptors {
+                    if descriptor(task1, task2) { return true }
+                    if descriptor(task2, task1) { return false }
+                }
+                return false
+            }
+        } else {
+            // Default sort by due date
+            tasks.sort { task1, task2 in
+                guard let date1 = task1.dueDate, let date2 = task2.dueDate else {
+                    return task1.dueDate != nil
+                }
+                return date1 < date2
+            }
+        }
+        
+        return tasks
     }
     
     public func fetchTasksDueToday() -> [Task] {
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: Date())
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-        
-        let predicate = NSPredicate(format: "dueDate >= %@ AND dueDate < %@ AND isCompleted == NO", startOfDay as NSDate, endOfDay as NSDate)
-        return fetchTasks(predicate: predicate)
+        return fetchTasks { task in
+            task.isDueToday
+        }
     }
     
     public func fetchOverdueTasks() -> [Task] {
-        let predicate = NSPredicate(format: "dueDate < %@ AND isCompleted == NO", Date() as NSDate)
-        return fetchTasks(predicate: predicate)
+        return fetchTasks { task in
+            task.isOverdue
+        }
     }
     
     public func fetchActiveTasks() -> [Task] {
-        let todayPredicate = NSPredicate(format: "dueDate >= %@ AND dueDate < %@ AND isCompleted == NO", 
-                                       Calendar.current.startOfDay(for: Date()) as NSDate,
-                                       Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date()))! as NSDate)
-        let overduePredicate = NSPredicate(format: "dueDate < %@ AND isCompleted == NO", Date() as NSDate)
-        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [todayPredicate, overduePredicate])
-        
-        return fetchTasks(predicate: compoundPredicate)
+        return fetchTasks { task in
+            task.isActive
+        }
     }
     
     public func fetchTasksByCategory(_ category: Category) -> [Task] {
-        let predicate = NSPredicate(format: "categoryName == %@", category.name)
-        return fetchTasks(predicate: predicate)
+        return fetchTasks { task in
+            task.categoryName == category.name
+        }
     }
     
     public func fetchCompletedTasks() -> [Task] {
-        let predicate = NSPredicate(format: "isCompleted == YES")
-        return fetchTasks(predicate: predicate, sortDescriptors: [NSSortDescriptor(keyPath: \Task.updatedAt, ascending: false)])
+        return fetchTasks { task in
+            task.isCompleted
+        }
     }
     
     // MARK: - Category Operations
     
     public func createCategory(name: String, color: String = "blue", icon: String = "folder") -> Category {
-        let context = persistenceController.container.viewContext
-        let category = Category(context: context)
-        
-        category.id = UUID()
-        category.name = name
-        category.color = color
-        category.icon = icon
-        category.createdAt = Date()
-        
-        saveContext()
+        let category = Category(name: name, color: color, icon: icon)
+        dataStore.categories.append(category)
+        dataStore.save()
         return category
     }
     
     public func fetchCategories() -> [Category] {
-        let request: NSFetchRequest<Category> = Category.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Category.name, ascending: true)]
-        
-        do {
-            return try persistenceController.container.viewContext.fetch(request)
-        } catch {
-            print("Error fetching categories: \(error)")
-            return []
-        }
+        return dataStore.categories.sorted { $0.name < $1.name }
     }
     
     public func updateCategory(_ category: Category) {
-        saveContext()
+        if let index = dataStore.categories.firstIndex(where: { $0.id == category.id }) {
+            dataStore.categories[index] = category
+            dataStore.save()
+        }
     }
     
     public func deleteCategory(_ category: Category) {
-        persistenceController.container.viewContext.delete(category)
-        saveContext()
+        dataStore.categories.removeAll { $0.id == category.id }
+        dataStore.save()
     }
     
     // MARK: - Preset Operations
@@ -168,48 +170,40 @@ public class TaskManager: ObservableObject {
         priority: TaskPriority = .medium,
         estimateMinutes: Int32 = 30
     ) -> TaskPreset {
-        let context = persistenceController.container.viewContext
-        let preset = TaskPreset(context: context)
-        
-        preset.id = UUID()
-        preset.title = title
-        preset.notes = notes
-        preset.category = category
-        preset.priority = priority
-        preset.estimateMinutes = estimateMinutes
-        preset.createdAt = Date()
-        preset.updatedAt = Date()
-        
-        saveContext()
+        let preset = TaskPreset(
+            title: title,
+            notes: notes,
+            category: category,
+            priority: priority,
+            estimateMinutes: estimateMinutes
+        )
+        dataStore.presets.append(preset)
+        dataStore.save()
         return preset
     }
     
     public func fetchPresets() -> [TaskPreset] {
-        let request: NSFetchRequest<TaskPreset> = TaskPreset.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \TaskPreset.title, ascending: true)]
-        
-        do {
-            return try persistenceController.container.viewContext.fetch(request)
-        } catch {
-            print("Error fetching presets: \(error)")
-            return []
-        }
+        return dataStore.presets.sorted { $0.title < $1.title }
     }
     
     public func updatePreset(_ preset: TaskPreset) {
-        preset.updatedAt = Date()
-        saveContext()
+        if let index = dataStore.presets.firstIndex(where: { $0.id == preset.id }) {
+            var updatedPreset = preset
+            updatedPreset.updatedAt = Date()
+            dataStore.presets[index] = updatedPreset
+            dataStore.save()
+        }
     }
     
     public func deletePreset(_ preset: TaskPreset) {
-        persistenceController.container.viewContext.delete(preset)
-        saveContext()
+        dataStore.presets.removeAll { $0.id == preset.id }
+        dataStore.save()
     }
     
     // MARK: - Helper Methods
     
     private func saveContext() {
-        persistenceController.saveContext()
+        dataStore.save()
     }
     
     // MARK: - Notification Management
@@ -231,64 +225,30 @@ public class TaskManager: ObservableObject {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         
-        let request: NSFetchRequest<DailyAggregate> = DailyAggregate.fetchRequest()
-        request.predicate = NSPredicate(format: "date == %@", today as NSDate)
-        
-        do {
-            let aggregates = try persistenceController.container.viewContext.fetch(request)
-            let aggregate = aggregates.first ?? DailyAggregate(context: persistenceController.container.viewContext)
-            
-            if aggregate.date == nil {
-                aggregate.id = UUID()
-                aggregate.date = today
-                aggregate.createdAt = Date()
-            }
-            
-            aggregate.tasksCompleted += 1
-            aggregate.focusTimeMinutes += task.estimateMinutes
-            aggregate.updatedAt = Date()
-            
-            // Update category breakdown
-            var breakdown = aggregate.categoryBreakdown ?? [:]
-            let categoryName = task.categoryName
-            breakdown[categoryName] = (breakdown[categoryName] ?? 0) + 1
-            aggregate.categoryBreakdown = breakdown
-            
-            saveContext()
-        } catch {
-            print("Error updating daily aggregate: \(error)")
+        if let index = dataStore.dailyAggregates.firstIndex(where: { calendar.isDate($0.date, inSameDayAs: today) }) {
+            dataStore.dailyAggregates[index].tasksCompleted += 1
+            dataStore.dailyAggregates[index].focusTimeMinutes += task.estimateMinutes
+            dataStore.dailyAggregates[index].updatedAt = Date()
+        } else {
+            let aggregate = DailyAggregate(
+                date: today,
+                tasksCompleted: 1,
+                tasksDue: 0,
+                focusTimeMinutes: task.estimateMinutes
+            )
+            dataStore.dailyAggregates.append(aggregate)
         }
+        
+        dataStore.save()
     }
     
     // MARK: - Seed Data
     
     public func createDefaultCategories() {
-        let defaultCategories = [
-            ("School", "blue", "graduationcap"),
-            ("Work", "green", "briefcase"),
-            ("Personal", "purple", "person"),
-            ("Health", "red", "heart")
-        ]
-        
-        for (name, color, icon) in defaultCategories {
-            if fetchCategories().first(where: { $0.name == name }) == nil {
-                createCategory(name: name, color: color, icon: icon)
-            }
-        }
+        // Already created in SimpleDataStore.init()
     }
     
     public func createDefaultPresets() {
-        let defaultPresets = [
-            ("Homework", "Complete assignment", "School", TaskPriority.medium, 60),
-            ("Workout", "Exercise session", "Health", TaskPriority.high, 45),
-            ("Deep Work", "Focused work session", "Work", TaskPriority.high, 90),
-            ("Read", "Reading time", "Personal", TaskPriority.low, 30)
-        ]
-        
-        for (title, notes, category, priority, minutes) in defaultPresets {
-            if fetchPresets().first(where: { $0.title == title }) == nil {
-                createPreset(title: title, notes: notes, category: category, priority: priority, estimateMinutes: Int32(minutes))
-            }
-        }
+        // Already created in SimpleDataStore.init()
     }
 }

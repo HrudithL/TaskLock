@@ -27,10 +27,10 @@ public class AppState: ObservableObject {
     
     public init() {
         self.persistenceController = PersistenceController.shared
-        self.taskManager = TaskManager(persistenceController: persistenceController)
+        self.taskManager = TaskManager(dataStore: persistenceController.dataStore)
         self.blockingManager = BlockingManager()
         self.policyEngine = PolicyEngine(taskManager: taskManager, blockingManager: blockingManager)
-        self.analyticsManager = AnalyticsManager(persistenceController: persistenceController, taskManager: taskManager)
+        self.analyticsManager = AnalyticsManager(dataStore: persistenceController.dataStore, taskManager: taskManager)
         self.physicalUnlockManager = PhysicalUnlockManager()
         self.notificationManager = NotificationManager.shared
         

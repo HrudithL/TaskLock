@@ -1,5 +1,4 @@
 import Foundation
-import CoreData
 import Charts
 
 // MARK: - Analytics Data Models
@@ -26,7 +25,7 @@ public struct FocusTimeData: Identifiable {
 
 // MARK: - Analytics Manager
 public class AnalyticsManager: ObservableObject {
-    private let persistenceController: PersistenceController
+    private let dataStore: SimpleDataStore
     private let taskManager: TaskManager
     
     @Published public var completionData: [CompletionData] = []
@@ -37,8 +36,8 @@ public class AnalyticsManager: ObservableObject {
     @Published public var onTimeCompletionRate: Double = 0.0
     @Published public var streakDays: Int = 0
     
-    public init(persistenceController: PersistenceController, taskManager: TaskManager) {
-        self.persistenceController = persistenceController
+    public init(dataStore: SimpleDataStore, taskManager: TaskManager) {
+        self.dataStore = dataStore
         self.taskManager = taskManager
         updateAnalytics()
     }
@@ -53,22 +52,13 @@ public class AnalyticsManager: ObservableObject {
     }
     
     private func updateCompletionData() {
-        let request: NSFetchRequest<DailyAggregate> = DailyAggregate.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \DailyAggregate.date, ascending: true)]
-        
-        do {
-            let aggregates = try persistenceController.container.viewContext.fetch(request)
-            completionData = aggregates.map { aggregate in
-                CompletionData(
-                    date: aggregate.date,
-                    tasksCompleted: Int(aggregate.tasksCompleted),
-                    tasksDue: Int(aggregate.tasksDue),
-                    completionRate: aggregate.completionRate
-                )
-            }
-        } catch {
-            print("Error fetching completion data: \(error)")
-            completionData = []
+        completionData = dataStore.dailyAggregates.map { aggregate in
+            CompletionData(
+                date: aggregate.date,
+                tasksCompleted: Int(aggregate.tasksCompleted),
+                tasksDue: Int(aggregate.tasksDue),
+                completionRate: aggregate.completionRate
+            )
         }
     }
     
@@ -92,20 +82,11 @@ public class AnalyticsManager: ObservableObject {
     }
     
     private func updateFocusTimeData() {
-        let request: NSFetchRequest<DailyAggregate> = DailyAggregate.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \DailyAggregate.date, ascending: true)]
-        
-        do {
-            let aggregates = try persistenceController.container.viewContext.fetch(request)
-            focusTimeData = aggregates.map { aggregate in
-                FocusTimeData(
-                    date: aggregate.date,
-                    minutes: Int(aggregate.focusTimeMinutes)
-                )
-            }
-        } catch {
-            print("Error fetching focus time data: \(error)")
-            focusTimeData = []
+        focusTimeData = dataStore.dailyAggregates.map { aggregate in
+            FocusTimeData(
+                date: aggregate.date,
+                minutes: Int(aggregate.focusTimeMinutes)
+            )
         }
     }
     

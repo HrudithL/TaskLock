@@ -1,72 +1,65 @@
 import Foundation
-import CoreData
+import SwiftUI
 
-// MARK: - Persistence Controller
+// MARK: - Simple Data Store
+public class SimpleDataStore: ObservableObject {
+    @Published public var tasks: [Task] = []
+    @Published public var categories: [Category] = []
+    @Published public var presets: [TaskPreset] = []
+    @Published public var dailyAggregates: [DailyAggregate] = []
+    
+    public init() {
+        loadDefaultData()
+    }
+    
+    private func loadDefaultData() {
+        // Create default categories
+        categories = [
+            Category(name: "School", color: "blue", icon: "graduationcap"),
+            Category(name: "Work", color: "green", icon: "briefcase"),
+            Category(name: "Personal", color: "purple", icon: "person"),
+            Category(name: "Health", color: "red", icon: "heart")
+        ]
+        
+        // Create default presets
+        presets = [
+            TaskPreset(title: "Homework", notes: "Complete assignment", category: "School", priority: .medium, estimateMinutes: 60),
+            TaskPreset(title: "Workout", notes: "Exercise session", category: "Health", priority: .high, estimateMinutes: 45),
+            TaskPreset(title: "Deep Work", notes: "Focused work session", category: "Work", priority: .high, estimateMinutes: 90),
+            TaskPreset(title: "Read", notes: "Reading time", category: "Personal", priority: .low, estimateMinutes: 30)
+        ]
+        
+        // Create some sample tasks
+        tasks = [
+            Task(title: "Complete project proposal", notes: "Finish the quarterly project proposal", dueDate: Calendar.current.date(byAdding: .day, value: 1, to: Date()), priority: .high, estimateMinutes: 120, categoryName: "Work"),
+            Task(title: "Grocery shopping", notes: "Buy ingredients for dinner", dueDate: Date(), priority: .medium, estimateMinutes: 30, categoryName: "Personal"),
+            Task(title: "Study for exam", notes: "Review chapters 5-8", dueDate: Calendar.current.date(byAdding: .day, value: 3, to: Date()), priority: .high, estimateMinutes: 180, categoryName: "School")
+        ]
+    }
+    
+    public func save() {
+        // In a real app, this would save to UserDefaults or a file
+        // For now, we'll just keep everything in memory
+    }
+}
+
+// MARK: - Persistence Controller (Simplified)
 public class PersistenceController {
     public static let shared = PersistenceController()
     
     public static var preview: PersistenceController = {
-        let result = PersistenceController(inMemory: true)
-        let viewContext = result.container.viewContext
-        
-        // Create sample data for previews
-        let sampleCategory = Category(context: viewContext)
-        sampleCategory.id = UUID()
-        sampleCategory.name = "Personal"
-        sampleCategory.color = "blue"
-        sampleCategory.icon = "person"
-        sampleCategory.createdAt = Date()
-        
-        let sampleTask = Task(context: viewContext)
-        sampleTask.id = UUID()
-        sampleTask.title = "Sample Task"
-        sampleTask.notes = "This is a sample task for preview"
-        sampleTask.dueDate = Date()
-        sampleTask.category = sampleCategory
-        sampleTask.priority = .medium
-        sampleTask.estimateMinutes = 30
-        sampleTask.isCompleted = false
-        sampleTask.createdAt = Date()
-        sampleTask.updatedAt = Date()
-        
-        do {
-            try viewContext.save()
-        } catch {
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-        }
+        let result = PersistenceController()
         return result
     }()
     
-    public let container: NSPersistentContainer
+    public let dataStore: SimpleDataStore
     
-    public init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "TaskLockModel")
-        
-        if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-        }
-        
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        
-        container.viewContext.automaticallyMergesChangesFromParent = true
+    public init() {
+        self.dataStore = SimpleDataStore()
     }
     
     public func save() {
-        let context = container.viewContext
-        
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
+        dataStore.save()
     }
     
     public func saveContext() {
