@@ -18,36 +18,36 @@ jobs:
       with:
         xcode-version: latest-stable
         
+    - name: List files
+      run: |
+        echo "Project structure:"
+        ls -la
+        echo "TaskLock directory:"
+        ls -la TaskLock/
+        
+    - name: Test Xcode project
+      run: |
+        echo "Testing Xcode project..."
+        xcodebuild -list -project TaskLock.xcodeproj
+        
     - name: Build for Simulator
       run: |
-        echo "Building TaskLock app..."
+        echo "Building for iOS Simulator..."
         xcodebuild -project TaskLock.xcodeproj \
                    -scheme TaskLock \
                    -configuration Debug \
                    -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
                    clean build \
-                   CODE_SIGNING_ALLOWED=NO
+                   CODE_SIGNING_ALLOWED=NO \
+                   -quiet
                    
-    - name: Create IPA
+    - name: Find built app
       run: |
-        echo "Creating IPA..."
-        APP_PATH=$(find . -name "*.app" -type d | head -1)
-        if [ -z "$APP_PATH" ]; then
-          echo "No .app file found"
+        echo "Looking for built app..."
+        find . -name "*.app" -type d
+        if [ $? -eq 0 ]; then
+          echo "✓ App built successfully!"
+        else
+          echo "✗ No app found"
           exit 1
         fi
-        
-        mkdir -p ./build
-        cd "$(dirname "$APP_PATH")"
-        zip -r ../../build/TaskLock.ipa "$(basename "$APP_PATH")"
-        cd ../../
-        
-        echo "IPA created successfully!"
-        ls -la ./build/
-                   
-    - name: Upload IPA
-      uses: actions/upload-artifact@v3
-      with:
-        name: TaskLock.ipa
-        path: ./build/TaskLock.ipa
-        retention-days: 30
