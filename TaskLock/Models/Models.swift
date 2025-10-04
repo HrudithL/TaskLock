@@ -25,7 +25,7 @@ public enum TaskPriority: String, CaseIterable, Codable {
 }
 
 // MARK: - Task Model
-public struct Task: Identifiable, Codable {
+public struct Task: Identifiable, Codable, Hashable {
     public let id: UUID
     public var title: String
     public var notes: String?
@@ -81,7 +81,7 @@ public struct Task: Identifiable, Codable {
 }
 
 // MARK: - Category Model
-public struct Category: Identifiable, Codable {
+public struct Category: Identifiable, Codable, Hashable {
     public let id: UUID
     public var name: String
     public var color: String

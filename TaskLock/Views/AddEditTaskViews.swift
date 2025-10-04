@@ -123,7 +123,7 @@ struct AddTaskView: View {
 
 // MARK: - Edit Task View
 struct EditTaskView: View {
-    let task: Task
+    var task: Task
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) private var dismiss
     
@@ -141,7 +141,7 @@ struct EditTaskView: View {
         self._notes = State(initialValue: task.notes ?? "")
         self._dueDate = State(initialValue: task.dueDate ?? Date())
         self._hasDueDate = State(initialValue: task.dueDate != nil)
-        self._selectedCategory = State(initialValue: task.category)
+        self._selectedCategory = State(initialValue: appState.categories.first { $0.name == task.categoryName })
         self._priority = State(initialValue: task.priority)
         self._estimateMinutes = State(initialValue: task.estimateMinutes)
     }
@@ -220,7 +220,7 @@ struct EditTaskView: View {
         task.title = title
         task.notes = notes.isEmpty ? nil : notes
         task.dueDate = hasDueDate ? dueDate : nil
-        task.category = selectedCategory
+        task.categoryName = selectedCategory?.name
         task.priority = priority
         task.estimateMinutes = estimateMinutes
         

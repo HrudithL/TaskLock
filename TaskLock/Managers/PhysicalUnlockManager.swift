@@ -75,7 +75,7 @@ public class PhysicalUnlockManager: NSObject, ObservableObject {
         guard let data = string.data(using: .utf8) else { return nil }
         
         let context = CIContext()
-        let filter = CIFilter.qrCodeGenerator()
+        let filter = CIFilter(name: "CIQRCodeGenerator")!
         filter.setValue(data, forKey: "inputMessage")
         
         guard let outputImage = filter.outputImage else { return nil }

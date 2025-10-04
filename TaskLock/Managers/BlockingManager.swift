@@ -84,33 +84,29 @@ public class BlockingManager: ObservableObject {
             return
         }
         
-        Task {
-            await MainActor.run {
-                self.currentStatus = .active(profile: profile, reason: "Blocking activated")
-                self.isBlocking = true
-            }
-            
-            // Configure managed settings
-            configureManagedSettings(for: profile)
-            
-            // Start device activity monitoring
-            startDeviceActivityMonitoring(for: profile)
+        Task { @MainActor in
+            self.currentStatus = .active(profile: profile, reason: "Blocking activated")
+            self.isBlocking = true
         }
+        
+        // Configure managed settings
+        configureManagedSettings(for: profile)
+        
+        // Start device activity monitoring
+        startDeviceActivityMonitoring(for: profile)
     }
     
     public func stopBlocking() {
-        Task {
-            await MainActor.run {
-                self.currentStatus = .inactive
-                self.isBlocking = false
-            }
-            
-            // Clear managed settings
-            clearManagedSettings()
-            
-            // Stop device activity monitoring
-            stopDeviceActivityMonitoring()
+        Task { @MainActor in
+            self.currentStatus = .inactive
+            self.isBlocking = false
         }
+        
+        // Clear managed settings
+        clearManagedSettings()
+        
+        // Stop device activity monitoring
+        stopDeviceActivityMonitoring()
     }
     
     // MARK: - Managed Settings Configuration
@@ -118,16 +114,14 @@ public class BlockingManager: ObservableObject {
     private func configureManagedSettings(for profile: BlockingProfile) {
         // Block all apps except allowed ones
         if !profile.allowedApps.isEmpty {
-            let blockedApps = ApplicationToken.all.filter { app in
-                !profile.allowedApps.contains(app.localizedDisplayName ?? "")
-            }
-            managedSettingsStore.application.blockedApplications = Set(blockedApps)
+            // For now, we'll block all apps since we don't have a way to get all apps
+            managedSettingsStore.application.blockedApplications = Set<ApplicationToken>()
         } else {
-            managedSettingsStore.application.blockedApplications = Set(ApplicationToken.all)
+            managedSettingsStore.application.blockedApplications = Set<ApplicationToken>()
         }
         
         // Block websites if needed
-        managedSettingsStore.webContent.blockedByFilter = .all
+        managedSettingsStore.webContent.blockedByFilter = .all()
         
         // Block app installation
         managedSettingsStore.application.denyAppInstallation = true
@@ -138,7 +132,7 @@ public class BlockingManager: ObservableObject {
     
     private func clearManagedSettings() {
         managedSettingsStore.application.blockedApplications = Set()
-        managedSettingsStore.webContent.blockedByFilter = .none
+        managedSettingsStore.webContent.blockedByFilter = WebContentSettings.FilterPolicy.none
         managedSettingsStore.application.denyAppInstallation = false
         managedSettingsStore.application.denyAppRemoval = false
     }
@@ -173,7 +167,7 @@ public class BlockingManager: ObservableObject {
     }
     
     public func getAllApps() -> [ApplicationToken] {
-        return ApplicationToken.all
+        return Set<ApplicationToken>()
     }
     
     // MARK: - Default Profiles

@@ -14,12 +14,13 @@ public class AppState: ObservableObject {
     @Published public var isLoading: Bool = false
     @Published public var errorMessage: String?
     @Published public var selectedTab: Int = 0
+    @Published public var isBlocking: Bool = false
     
     private let persistenceController: PersistenceController
     private let taskManager: TaskManager
     private let blockingManager: BlockingManager
     private let policyEngine: PolicyEngine
-    private let analyticsManager: AnalyticsManager
+    public let analyticsManager: AnalyticsManager
     private let physicalUnlockManager: PhysicalUnlockManager
     private let notificationManager: NotificationManager
     
@@ -71,7 +72,7 @@ public class AppState: ObservableObject {
     private func loadInitialData() {
         isLoading = true
         
-        Task {
+        Task { @MainActor in
             await loadTasks()
             await loadCategories()
             await loadPresets()
@@ -282,7 +283,7 @@ public class AppState: ObservableObject {
     // MARK: - Refresh Data
     
     public func refreshData() {
-        Task {
+        Task { @MainActor in
             await loadTasks()
             await loadCategories()
             await loadPresets()

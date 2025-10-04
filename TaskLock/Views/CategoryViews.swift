@@ -41,12 +41,15 @@ struct CategoryCardView: View {
                     .font(.headline)
                     .foregroundColor(.primary)
                 
-                Text("\(category.taskCount) tasks")
+                Text("\(appState.taskManager.fetchTasksByCategory(category).count) tasks")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
-                if category.taskCount > 0 {
-                    ProgressView(value: Double(category.completedTaskCount), total: Double(category.taskCount))
+                let taskCount = appState.taskManager.fetchTasksByCategory(category).count
+                let completedCount = appState.taskManager.fetchTasksByCategory(category).filter { $0.isCompleted }.count
+                
+                if taskCount > 0 {
+                    ProgressView(value: Double(completedCount), total: Double(taskCount))
                         .progressViewStyle(LinearProgressViewStyle(tint: Color(category.color)))
                 }
             }

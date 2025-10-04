@@ -61,7 +61,7 @@ struct TaskRowView: View {
                     
                     Spacer()
                     
-                    Label(task.categoryName, systemImage: "folder")
+                    Label(task.categoryName ?? "Uncategorized", systemImage: "folder")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     

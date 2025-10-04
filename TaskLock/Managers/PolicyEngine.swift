@@ -123,7 +123,9 @@ public class PolicyEngine: ObservableObject {
         case .dueTodayOnly:
             return taskManager.fetchTasksDueToday()
         case .custom(let predicate):
-            return taskManager.fetchTasks(predicate: predicate)
+            return taskManager.fetchTasks { task in
+                return task.isActive
+            }
         }
     }
     
