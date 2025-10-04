@@ -1,32 +1,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var appState = AppState()
+    
+    var body: some View {
+        if appState.isLoading {
+            LoadingView()
+        } else {
+            MainTabView()
+                .environmentObject(appState)
+        }
+    }
+}
+
+struct LoadingView: View {
     var body: some View {
         VStack {
-            Image(systemName: "lock.shield")
-                .font(.system(size: 100))
-                .foregroundColor(.blue)
-            
-            Text("TaskLock")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            Text("Task-driven blocking app")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            
-            Spacer()
-            
-            Text("Build Test - v1.2 - Final Test")
-                .font(.title2)
-                .foregroundColor(.secondary)
-            
-            Spacer()
+            ProgressView()
+                .scaleEffect(1.5)
+            Text("Loading TaskLock...")
+                .font(.headline)
+                .padding(.top)
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

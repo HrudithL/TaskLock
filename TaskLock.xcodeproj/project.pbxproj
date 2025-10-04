@@ -11,6 +11,23 @@
 		1A0000030000000000000001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000020000000000000001 /* ContentView.swift */; };
 		1A0000050000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A0000040000000000000001 /* Assets.xcassets */; };
 		1A0000080000000000000001 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A0000070000000000000001 /* Preview Assets.xcassets */; };
+		1A0000200000000000000001 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00001F0000000000000001 /* Models.swift */; };
+		1A0000220000000000000001 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000210000000000000001 /* PersistenceController.swift */; };
+		1A0000240000000000000001 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000230000000000000001 /* TaskManager.swift */; };
+		1A0000260000000000000001 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000250000000000000001 /* NotificationManager.swift */; };
+		1A0000280000000000000001 /* BlockingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000270000000000000001 /* BlockingManager.swift */; };
+		1A00002A0000000000000001 /* PolicyEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000290000000000000001 /* PolicyEngine.swift */; };
+		1A00002C0000000000000001 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00002B0000000000000001 /* AnalyticsManager.swift */; };
+		1A00002E0000000000000001 /* PhysicalUnlockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00002D0000000000000001 /* PhysicalUnlockManager.swift */; };
+		1A0000300000000000000001 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00002F0000000000000001 /* AppState.swift */; };
+		1A0000320000000000000001 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000310000000000000001 /* MainTabView.swift */; };
+		1A0000340000000000000001 /* TaskViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000330000000000000001 /* TaskViews.swift */; };
+		1A0000360000000000000001 /* AddEditTaskViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000350000000000000001 /* AddEditTaskViews.swift */; };
+		1A0000380000000000000001 /* CategoryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000370000000000000001 /* CategoryViews.swift */; };
+		1A00003A0000000000000001 /* AnalyticsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000390000000000000001 /* AnalyticsViews.swift */; };
+		1A00003C0000000000000001 /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00003B0000000000000001 /* SettingsViews.swift */; };
+		1A00003E0000000000000001 /* BlockingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00003D0000000000000001 /* BlockingOverlay.swift */; };
+		1A0000400000000000000001 /* TaskLockModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1A00003F0000000000000001 /* TaskLockModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +38,23 @@
 		1A0000090000000000000001 /* TaskLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A00000A0000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A00000B0000000000000001 /* TaskLock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskLock.entitlements; sourceTree = "<group>"; };
+		1A00001F0000000000000001 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		1A0000210000000000000001 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		1A0000230000000000000001 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
+		1A0000250000000000000001 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		1A0000270000000000000001 /* BlockingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockingManager.swift; sourceTree = "<group>"; };
+		1A0000290000000000000001 /* PolicyEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyEngine.swift; sourceTree = "<group>"; };
+		1A00002B0000000000000001 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
+		1A00002D0000000000000001 /* PhysicalUnlockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicalUnlockManager.swift; sourceTree = "<group>"; };
+		1A00002F0000000000000001 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		1A0000310000000000000001 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		1A0000330000000000000001 /* TaskViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViews.swift; sourceTree = "<group>"; };
+		1A0000350000000000000001 /* AddEditTaskViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditTaskViews.swift; sourceTree = "<group>"; };
+		1A0000370000000000000001 /* CategoryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViews.swift; sourceTree = "<group>"; };
+		1A0000390000000000000001 /* AnalyticsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViews.swift; sourceTree = "<group>"; };
+		1A00003B0000000000000001 /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
+		1A00003D0000000000000001 /* BlockingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockingOverlay.swift; sourceTree = "<group>"; };
+		1A00003F0000000000000001 /* TaskLockModel.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaskLockModel.xcdatamodeld; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,12 +81,53 @@
 			children = (
 				1A0000000000000000000001 /* TaskLockApp.swift */,
 				1A0000020000000000000001 /* ContentView.swift */,
+				1A0000410000000000000001 /* Models */,
+				1A0000420000000000000001 /* Managers */,
+				1A0000430000000000000001 /* Views */,
 				1A0000040000000000000001 /* Assets.xcassets */,
 				1A0000060000000000000001 /* Preview Content */,
 				1A00000A0000000000000001 /* Info.plist */,
 				1A00000B0000000000000001 /* TaskLock.entitlements */,
 			);
 			path = TaskLock;
+			sourceTree = "<group>";
+		};
+		1A0000410000000000000001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1A00001F0000000000000001 /* Models.swift */,
+				1A00003F0000000000000001 /* TaskLockModel.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1A0000420000000000000001 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				1A0000210000000000000001 /* PersistenceController.swift */,
+				1A0000230000000000000001 /* TaskManager.swift */,
+				1A0000250000000000000001 /* NotificationManager.swift */,
+				1A0000270000000000000001 /* BlockingManager.swift */,
+				1A0000290000000000000001 /* PolicyEngine.swift */,
+				1A00002B0000000000000001 /* AnalyticsManager.swift */,
+				1A00002D0000000000000001 /* PhysicalUnlockManager.swift */,
+				1A00002F0000000000000001 /* AppState.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		1A0000430000000000000001 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1A0000310000000000000001 /* MainTabView.swift */,
+				1A0000330000000000000001 /* TaskViews.swift */,
+				1A0000350000000000000001 /* AddEditTaskViews.swift */,
+				1A0000370000000000000001 /* CategoryViews.swift */,
+				1A0000390000000000000001 /* AnalyticsViews.swift */,
+				1A00003B0000000000000001 /* SettingsViews.swift */,
+				1A00003D0000000000000001 /* BlockingOverlay.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		1A0000060000000000000001 /* Preview Content */ = {
@@ -143,6 +218,23 @@
 			files = (
 				1A0000030000000000000001 /* ContentView.swift in Sources */,
 				1A0000010000000000000001 /* TaskLockApp.swift in Sources */,
+				1A0000200000000000000001 /* Models.swift in Sources */,
+				1A0000220000000000000001 /* PersistenceController.swift in Sources */,
+				1A0000240000000000000001 /* TaskManager.swift in Sources */,
+				1A0000260000000000000001 /* NotificationManager.swift in Sources */,
+				1A0000280000000000000001 /* BlockingManager.swift in Sources */,
+				1A00002A0000000000000001 /* PolicyEngine.swift in Sources */,
+				1A00002C0000000000000001 /* AnalyticsManager.swift in Sources */,
+				1A00002E0000000000000001 /* PhysicalUnlockManager.swift in Sources */,
+				1A0000300000000000000001 /* AppState.swift in Sources */,
+				1A0000320000000000000001 /* MainTabView.swift in Sources */,
+				1A0000340000000000000001 /* TaskViews.swift in Sources */,
+				1A0000360000000000000001 /* AddEditTaskViews.swift in Sources */,
+				1A0000380000000000000001 /* CategoryViews.swift in Sources */,
+				1A00003A0000000000000001 /* AnalyticsViews.swift in Sources */,
+				1A00003C0000000000000001 /* SettingsViews.swift in Sources */,
+				1A00003E0000000000000001 /* BlockingOverlay.swift in Sources */,
+				1A0000400000000000000001 /* TaskLockModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
