@@ -27,17 +27,17 @@
 		1A00003A0000000000000001 /* AnalyticsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000390000000000000001 /* AnalyticsViews.swift */; };
 		1A00003C0000000000000001 /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00003B0000000000000001 /* SettingsViews.swift */; };
 		1A00003E0000000000000001 /* BlockingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00003D0000000000000001 /* BlockingOverlay.swift */; };
-		1A0000400000000000000001 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A00003F0000000000000001 /* FamilyControls.framework */; };
-		1A0000420000000000000001 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000410000000000000001 /* ManagedSettings.framework */; };
-		1A0000440000000000000001 /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000430000000000000001 /* DeviceActivity.framework */; };
-		1A0000460000000000000001 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000450000000000000001 /* UserNotifications.framework */; };
-		1A0000480000000000000001 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000470000000000000001 /* CoreNFC.framework */; };
-		1A00004A0000000000000001 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000490000000000000001 /* AVFoundation.framework */; };
-		1A00004C0000000000000001 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A00004B0000000000000001 /* UIKit.framework */; };
-		1A00004E0000000000000001 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A00004D0000000000000001 /* Foundation.framework */; };
-		1A0000500000000000000001 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A00004F0000000000000001 /* SwiftUI.framework */; };
-		1A0000520000000000000001 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000510000000000000001 /* Charts.framework */; };
-		1A0000540000000000000001 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000530000000000000001 /* Combine.framework */; };
+		1A0000400000000000000001 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000600000000000000001 /* FamilyControls.framework */; };
+		1A0000420000000000000001 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000610000000000000001 /* ManagedSettings.framework */; };
+		1A0000440000000000000001 /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000620000000000000001 /* DeviceActivity.framework */; };
+		1A0000460000000000000001 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000630000000000000001 /* UserNotifications.framework */; };
+		1A0000480000000000000001 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000640000000000000001 /* CoreNFC.framework */; };
+		1A00004A0000000000000001 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000650000000000000001 /* AVFoundation.framework */; };
+		1A00004C0000000000000001 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000660000000000000001 /* UIKit.framework */; };
+		1A00004E0000000000000001 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000670000000000000001 /* Foundation.framework */; };
+		1A0000500000000000000001 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000680000000000000001 /* SwiftUI.framework */; };
+		1A0000520000000000000001 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0000690000000000000001 /* Charts.framework */; };
+		1A0000540000000000000001 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A00006A0000000000000001 /* Combine.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,17 +64,17 @@
 		1A0000390000000000000001 /* AnalyticsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViews.swift; sourceTree = "<group>"; };
 		1A00003B0000000000000001 /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
 		1A00003D0000000000000001 /* BlockingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockingOverlay.swift; sourceTree = "<group>"; };
-		1A00003F0000000000000001 /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
-		1A0000410000000000000001 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
-		1A0000430000000000000001 /* DeviceActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeviceActivity.framework; path = System/Library/Frameworks/DeviceActivity.framework; sourceTree = SDKROOT; };
-		1A0000450000000000000001 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
-		1A0000470000000000000001 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
-		1A0000490000000000000001 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		1A00004B0000000000000001 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		1A00004D0000000000000001 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1A00004F0000000000000001 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		1A0000510000000000000001 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = System/Library/Frameworks/Charts.framework; sourceTree = SDKROOT; };
-		1A0000530000000000000001 /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
+		1A0000600000000000000001 /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
+		1A0000610000000000000001 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
+		1A0000620000000000000001 /* DeviceActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeviceActivity.framework; path = System/Library/Frameworks/DeviceActivity.framework; sourceTree = SDKROOT; };
+		1A0000630000000000000001 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		1A0000640000000000000001 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
+		1A0000650000000000000001 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		1A0000660000000000000001 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		1A0000670000000000000001 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1A0000680000000000000001 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		1A0000690000000000000001 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = System/Library/Frameworks/Charts.framework; sourceTree = SDKROOT; };
+		1A00006A0000000000000001 /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,17 +180,17 @@
 		1A0000550000000000000001 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1A00003F0000000000000001 /* FamilyControls.framework */,
-				1A0000410000000000000001 /* ManagedSettings.framework */,
-				1A0000430000000000000001 /* DeviceActivity.framework */,
-				1A0000450000000000000001 /* UserNotifications.framework */,
-				1A0000470000000000000001 /* CoreNFC.framework */,
-				1A0000490000000000000001 /* AVFoundation.framework */,
-				1A00004B0000000000000001 /* UIKit.framework */,
-				1A00004D0000000000000001 /* Foundation.framework */,
-				1A00004F0000000000000001 /* SwiftUI.framework */,
-				1A0000510000000000000001 /* Charts.framework */,
-				1A0000530000000000000001 /* Combine.framework */,
+				1A0000600000000000000001 /* FamilyControls.framework */,
+				1A0000610000000000000001 /* ManagedSettings.framework */,
+				1A0000620000000000000001 /* DeviceActivity.framework */,
+				1A0000630000000000000001 /* UserNotifications.framework */,
+				1A0000640000000000000001 /* CoreNFC.framework */,
+				1A0000650000000000000001 /* AVFoundation.framework */,
+				1A0000660000000000000001 /* UIKit.framework */,
+				1A0000670000000000000001 /* Foundation.framework */,
+				1A0000680000000000000001 /* SwiftUI.framework */,
+				1A0000690000000000000001 /* Charts.framework */,
+				1A00006A0000000000000001 /* Combine.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
