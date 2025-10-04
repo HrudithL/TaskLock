@@ -1,5 +1,6 @@
 import Foundation
 import Charts
+import Combine
 
 // MARK: - Analytics Data Models
 public struct CompletionData: Identifiable {
