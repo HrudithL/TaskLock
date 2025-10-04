@@ -167,7 +167,4 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
     }
 }
 
-// MARK: - Notification Names
-extension Notification.Name {
-    static let taskCompletedFromNotification = Notification.Name("taskCompletedFromNotification")
-}
+// MARK: - Notification Names (already defined above)
