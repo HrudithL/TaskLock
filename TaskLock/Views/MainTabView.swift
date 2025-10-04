@@ -1,53 +1,38 @@
 import SwiftUI
-import Charts
 
-// MARK: - Main Tab View
+// MARK: - Simplified Main Tab View
 struct MainTabView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
         TabView(selection: $appState.selectedTab) {
-            TodayView()
+            TasksView()
                 .tabItem {
                     Image(systemName: "calendar")
-                    Text("Today")
+                    Text("Tasks")
                 }
                 .tag(0)
-            
-            UpcomingView()
-                .tabItem {
-                    Image(systemName: "calendar.badge.clock")
-                    Text("Upcoming")
-                }
-                .tag(1)
             
             CategoriesView()
                 .tabItem {
                     Image(systemName: "folder")
                     Text("Categories")
                 }
-                .tag(2)
-            
-            AllTasksView()
-                .tabItem {
-                    Image(systemName: "list.bullet")
-                    Text("All Tasks")
-                }
-                .tag(3)
+                .tag(1)
             
             StatsView()
                 .tabItem {
                     Image(systemName: "chart.bar")
                     Text("Stats")
                 }
-                .tag(4)
+                .tag(2)
             
             SettingsView()
                 .tabItem {
                     Image(systemName: "gear")
                     Text("Settings")
                 }
-                .tag(5)
+                .tag(3)
         }
         .overlay(
             // Blocking overlay
@@ -60,21 +45,26 @@ struct MainTabView: View {
     }
 }
 
-// MARK: - Today View
-struct TodayView: View {
+// MARK: - Simple Tasks View
+struct TasksView: View {
     @EnvironmentObject var appState: AppState
     @State private var showingAddTask = false
     
     var body: some View {
         NavigationView {
             VStack {
-                if appState.getTasksDueToday().isEmpty {
-                    EmptyTodayView()
+                if appState.tasks.isEmpty {
+                    EmptyTasksView()
                 } else {
-                    TaskListView(tasks: appState.getTasksDueToday())
+                    List {
+                        ForEach(appState.tasks, id: \.id) { task in
+                            TaskRowView(task: task)
+                        }
+                        .onDelete(perform: deleteTasks)
+                    }
                 }
             }
-            .navigationTitle("Today")
+            .navigationTitle("Tasks")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingAddTask = true }) {
@@ -87,56 +77,65 @@ struct TodayView: View {
             }
         }
     }
+    
+    private func deleteTasks(offsets: IndexSet) {
+        for index in offsets {
+            let task = appState.tasks[index]
+            appState.deleteTask(task)
+        }
+    }
 }
 
-// MARK: - Upcoming View
-struct UpcomingView: View {
+// MARK: - Simple Task Row View
+struct TaskRowView: View {
+    let task: TaskItem
     @EnvironmentObject var appState: AppState
-    @State private var showingAddTask = false
     
     var body: some View {
-        NavigationView {
-            VStack {
-                if appState.getOverdueTasks().isEmpty && appState.tasks.filter({ !$0.isCompleted && $0.dueDate != nil && !$0.isDueToday }).isEmpty {
-                    EmptyUpcomingView()
-                } else {
-                    VStack(alignment: .leading, spacing: 16) {
-                        if !appState.getOverdueTasks().isEmpty {
-                            VStack(alignment: .leading) {
-                                Text("Overdue")
-                                    .font(.headline)
-                                    .foregroundColor(.red)
-                                TaskListView(tasks: appState.getOverdueTasks())
-                            }
-                        }
-                        
-                        let upcomingTasks = appState.tasks.filter { !$0.isCompleted && $0.dueDate != nil && !$0.isDueToday }
-                        if !upcomingTasks.isEmpty {
-                            VStack(alignment: .leading) {
-                                Text("Upcoming")
-                                    .font(.headline)
-                                TaskListView(tasks: upcomingTasks)
-                            }
-                        }
-                    }
-                }
+        HStack {
+            Button(action: {
+                appState.completeTask(task)
+            }) {
+                Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(task.isCompleted ? .green : .gray)
+                    .font(.title2)
             }
-            .navigationTitle("Upcoming")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { showingAddTask = true }) {
-                        Image(systemName: "plus")
-                    }
+            .buttonStyle(PlainButtonStyle())
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(task.title)
+                    .font(.headline)
+                    .strikethrough(task.isCompleted)
+                    .foregroundColor(task.isCompleted ? .secondary : .primary)
+                
+                if let notes = task.notes, !notes.isEmpty {
+                    Text(notes)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-            }
-            .sheet(isPresented: $showingAddTask) {
-                AddTaskView()
+                
+                HStack {
+                    if let dueDate = task.dueDate {
+                        Text(dueDate, style: .date)
+                            .font(.caption2)
+                            .foregroundColor(task.isOverdue ? .red : .secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    Text(task.priority.displayName)
+                        .font(.caption2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 2)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(4)
+                }
             }
         }
     }
 }
 
-// MARK: - Categories View
+// MARK: - Simple Categories View
 struct CategoriesView: View {
     @EnvironmentObject var appState: AppState
     @State private var showingAddCategory = false
@@ -147,7 +146,12 @@ struct CategoriesView: View {
                 if appState.categories.isEmpty {
                     EmptyCategoriesView()
                 } else {
-                    CategoryGridView(categories: appState.categories)
+                    List {
+                        ForEach(appState.categories, id: \.id) { category in
+                            CategoryRowView(category: category)
+                        }
+                        .onDelete(perform: deleteCategories)
+                    }
                 }
             }
             .navigationTitle("Categories")
@@ -163,64 +167,40 @@ struct CategoriesView: View {
             }
         }
     }
-}
-
-// MARK: - All Tasks View
-struct AllTasksView: View {
-    @EnvironmentObject var appState: AppState
-    @State private var showingAddTask = false
-    @State private var selectedFilter: TaskFilter = .all
     
-    enum TaskFilter: String, CaseIterable {
-        case all = "All"
-        case active = "Active"
-        case completed = "Completed"
-    }
-    
-    var filteredTasks: [TaskItem] {
-        switch selectedFilter {
-        case .all:
-            return appState.tasks
-        case .active:
-            return appState.tasks.filter { !$0.isCompleted }
-        case .completed:
-            return appState.getCompletedTasks()
+    private func deleteCategories(offsets: IndexSet) {
+        for index in offsets {
+            let category = appState.categories[index]
+            appState.deleteCategory(category)
         }
     }
+}
+
+// MARK: - Simple Category Row View
+struct CategoryRowView: View {
+    let category: Category
     
     var body: some View {
-        NavigationView {
-            VStack {
-                Picker("Filter", selection: $selectedFilter) {
-                    ForEach(TaskFilter.allCases, id: \.self) { filter in
-                        Text(filter.rawValue).tag(filter)
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
+        HStack {
+            Image(systemName: category.icon)
+                .foregroundColor(.blue)
+                .font(.title2)
+            
+            VStack(alignment: .leading) {
+                Text(category.name)
+                    .font(.headline)
                 
-                if filteredTasks.isEmpty {
-                    EmptyAllTasksView()
-                } else {
-                    TaskListView(tasks: filteredTasks)
-                }
+                Text("Created: \(category.createdAt, style: .date)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
-            .navigationTitle("All Tasks")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { showingAddTask = true }) {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-            .sheet(isPresented: $showingAddTask) {
-                AddTaskView()
-            }
+            
+            Spacer()
         }
     }
 }
 
-// MARK: - Stats View
+// MARK: - Simple Stats View
 struct StatsView: View {
     @EnvironmentObject var appState: AppState
     
@@ -229,28 +209,45 @@ struct StatsView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     // Summary Cards
-                    SummaryCardsView()
-                    
-                    // Completion Chart
-                    CompletionChartView()
-                    
-                    // Category Breakdown
-                    CategoryBreakdownView()
-                    
-                    // Focus Time Chart
-                    FocusTimeChartView()
-                    
-                    // Insights
-                    InsightsView()
+                    VStack(spacing: 16) {
+                        StatCard(title: "Total Tasks", value: "\(appState.tasks.count)", color: .blue)
+                        StatCard(title: "Completed", value: "\(appState.getCompletedTasks().count)", color: .green)
+                        StatCard(title: "Active", value: "\(appState.getActiveTasks().count)", color: .orange)
+                        StatCard(title: "Categories", value: "\(appState.categories.count)", color: .purple)
+                    }
+                    .padding()
                 }
-                .padding()
             }
             .navigationTitle("Statistics")
         }
     }
 }
 
-// MARK: - Settings View
+// MARK: - Stat Card
+struct StatCard: View {
+    let title: String
+    let value: String
+    let color: Color
+    
+    var body: some View {
+        VStack {
+            Text(value)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(color)
+            
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(12)
+    }
+}
+
+// MARK: - Simple Settings View
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
     
@@ -258,22 +255,216 @@ struct SettingsView: View {
         NavigationView {
             List {
                 Section("Blocking") {
-                    BlockingSettingsView()
-                }
-                
-                Section("Notifications") {
-                    NotificationSettingsView()
+                    HStack {
+                        Text("Task-Conditional Blocking")
+                        Spacer()
+                        Toggle("", isOn: .constant(false))
+                    }
                 }
                 
                 Section("Data") {
-                    DataSettingsView()
+                    Button("Reset All Data") {
+                        // Reset data
+                    }
+                    .foregroundColor(.red)
                 }
                 
                 Section("About") {
-                    AboutSettingsView()
+                    HStack {
+                        Text("Version")
+                        Spacer()
+                        Text("1.0")
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
             .navigationTitle("Settings")
+        }
+    }
+}
+
+// MARK: - Empty State Views
+struct EmptyTasksView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "checklist")
+                .font(.system(size: 60))
+                .foregroundColor(.gray)
+            
+            Text("No Tasks Yet")
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            Text("Tap the + button to add your first task")
+                .font(.body)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
+    }
+}
+
+struct EmptyCategoriesView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "folder")
+                .font(.system(size: 60))
+                .foregroundColor(.gray)
+            
+            Text("No Categories Yet")
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            Text("Tap the + button to add your first category")
+                .font(.body)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
+    }
+}
+
+// MARK: - Add Views (Stubs)
+struct AddTaskView: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var appState: AppState
+    
+    @State private var title = ""
+    @State private var notes = ""
+    @State private var selectedPriority: TaskPriority = .medium
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section("Task Details") {
+                    TextField("Title", text: $title)
+                    TextField("Notes", text: $notes, axis: .vertical)
+                        .lineLimit(3...6)
+                }
+                
+                Section("Priority") {
+                    Picker("Priority", selection: $selectedPriority) {
+                        ForEach(TaskPriority.allCases, id: \.self) { priority in
+                            Text(priority.displayName).tag(priority)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+            }
+            .navigationTitle("Add Task")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        appState.createTask(title: title, notes: notes.isEmpty ? nil : notes, priority: selectedPriority)
+                        dismiss()
+                    }
+                    .disabled(title.isEmpty)
+                }
+            }
+        }
+    }
+}
+
+struct AddCategoryView: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var appState: AppState
+    
+    @State private var name = ""
+    @State private var selectedIcon = "folder"
+    
+    let icons = ["folder", "heart", "briefcase", "graduationcap", "house", "car", "gamecontroller"]
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section("Category Details") {
+                    TextField("Name", text: $name)
+                }
+                
+                Section("Icon") {
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4)) {
+                        ForEach(icons, id: \.self) { icon in
+                            Button(action: {
+                                selectedIcon = icon
+                            }) {
+                                Image(systemName: icon)
+                                    .font(.title2)
+                                    .foregroundColor(selectedIcon == icon ? .blue : .gray)
+                                    .frame(width: 50, height: 50)
+                                    .background(selectedIcon == icon ? Color.blue.opacity(0.1) : Color.clear)
+                                    .cornerRadius(8)
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Add Category")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        appState.createCategory(name: name, icon: selectedIcon)
+                        dismiss()
+                    }
+                    .disabled(name.isEmpty)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Blocking Overlay (Stub)
+struct BlockingOverlay: View {
+    let profile: BlockingProfile
+    let reason: String
+    
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.8)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                Image(systemName: "lock.shield.fill")
+                    .font(.system(size: 80))
+                    .foregroundColor(.red)
+                
+                Text("TaskLock Active")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+                Text(profile.name)
+                    .font(.title2)
+                    .foregroundColor(.white)
+                
+                Text(reason)
+                    .font(.body)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Button("Emergency Unlock") {
+                    // Emergency unlock
+                }
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding()
+                .background(Color.red)
+                .cornerRadius(10)
+            }
         }
     }
 }
