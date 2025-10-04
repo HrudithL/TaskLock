@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Task List View
 struct TaskListView: View {
-    let tasks: [Task]
+    let tasks: [TaskItem]
     @EnvironmentObject var appState: AppState
     
     var body: some View {
@@ -24,7 +24,7 @@ struct TaskListView: View {
 
 // MARK: - Task Row View
 struct TaskRowView: View {
-    let task: Task
+    let task: TaskItem
     @EnvironmentObject var appState: AppState
     @State private var showingEditTask = false
     

@@ -177,7 +177,7 @@ struct AllTasksView: View {
         case completed = "Completed"
     }
     
-    var filteredTasks: [Task] {
+    var filteredTasks: [TaskItem] {
         switch selectedFilter {
         case .all:
             return appState.tasks

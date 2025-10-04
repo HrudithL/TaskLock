@@ -76,7 +76,7 @@ struct CategoryTasksView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showingAddTask = false
     
-    var categoryTasks: [Task] {
+    var categoryTasks: [TaskItem] {
         appState.getTasksByCategory(category)
     }
     

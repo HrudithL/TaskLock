@@ -135,7 +135,7 @@ struct EditTaskView: View {
     @State private var priority: TaskPriority
     @State private var estimateMinutes: Int32
     
-    init(task: Task) {
+    init(task: TaskItem) {
         self.task = task
         self._title = State(initialValue: task.title)
         self._notes = State(initialValue: task.notes ?? "")

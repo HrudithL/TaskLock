@@ -162,7 +162,7 @@ public class AppState: ObservableObject {
         }
     }
     
-    public func updateTask(_ task: Task) {
+    public func updateTask(_ task: TaskItem) {
         taskManager.updateTask(task)
         
         // Re-evaluate blocking policy
@@ -171,7 +171,7 @@ public class AppState: ObservableObject {
         }
     }
     
-    public func completeTask(_ task: Task) {
+    public func completeTask(_ task: TaskItem) {
         taskManager.completeTask(task)
         
         // Update analytics
@@ -183,7 +183,7 @@ public class AppState: ObservableObject {
         }
     }
     
-    public func deleteTask(_ task: Task) {
+    public func deleteTask(_ task: TaskItem) {
         taskManager.deleteTask(task)
         tasks.removeAll { $0.id == task.id }
         
@@ -246,23 +246,23 @@ public class AppState: ObservableObject {
     
     // MARK: - Filtered Task Lists
     
-    public func getTasksDueToday() -> [Task] {
+    public func getTasksDueToday() -> [TaskItem] {
         return taskManager.fetchTasksDueToday()
     }
     
-    public func getOverdueTasks() -> [Task] {
+    public func getOverdueTasks() -> [TaskItem] {
         return taskManager.fetchOverdueTasks()
     }
     
-    public func getActiveTasks() -> [Task] {
+    public func getActiveTasks() -> [TaskItem] {
         return taskManager.fetchActiveTasks()
     }
     
-    public func getTasksByCategory(_ category: Category) -> [Task] {
+    public func getTasksByCategory(_ category: Category) -> [TaskItem] {
         return taskManager.fetchTasksByCategory(category)
     }
     
-    public func getCompletedTasks() -> [Task] {
+    public func getCompletedTasks() -> [TaskItem] {
         return taskManager.fetchCompletedTasks()
     }
     
