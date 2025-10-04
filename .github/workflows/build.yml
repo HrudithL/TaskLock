@@ -85,10 +85,14 @@ jobs:
         fi
         
         echo "Found app at: $APP_PATH"
+        
+        # Create build directory in project root
         mkdir -p ./build
-        cd "$(dirname "$APP_PATH")"
-        zip -r ../../build/TaskLock.ipa "$(basename "$APP_PATH")"
-        cd ../../
+        
+        # Create IPA using absolute paths
+        cd "$APP_PATH"
+        zip -r "$OLDPWD/build/TaskLock.ipa" .
+        cd "$OLDPWD"
         
         echo "IPA created successfully!"
         ls -la ./build/
