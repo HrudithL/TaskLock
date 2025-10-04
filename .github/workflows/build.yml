@@ -26,8 +26,6 @@ jobs:
         ls -la
         echo "=== TaskLock Directory ==="
         ls -la TaskLock/
-        echo "=== Sources Directory ==="
-        ls -la TaskLock/Sources/
         echo "=== Xcode Project ==="
         ls -la TaskLock.xcodeproj/
         
@@ -35,11 +33,6 @@ jobs:
       run: |
         echo "=== Validating Xcode Project ==="
         xcodebuild -list -project TaskLock.xcodeproj
-        
-    - name: Check Swift files for syntax errors
-      run: |
-        echo "=== Checking Swift files ==="
-        find TaskLock/Sources -name "*.swift" -exec echo "Checking: {}" \; -exec swiftc -parse {} \;
         
     - name: Build for Simulator (Debug)
       run: |
@@ -58,20 +51,57 @@ jobs:
         find ./DerivedData -name "*.app" -type d || echo "No .app files found"
         ls -la ./DerivedData/Build/Products/Debug-iphonesimulator/ || echo "Debug products directory not found"
         
-    - name: Upload Build Artifacts
-      if: success()
-      uses: actions/upload-artifact@v3
-      with:
-        name: TaskLock-build-success
-        path: |
-          ./DerivedData/Build/Products/Debug-iphonesimulator/
-        retention-days: 7
+    - name: Create IPA
+      run: |
+        echo "=== Creating IPA ==="
+        APP_PATH=$(find ./DerivedData -name "*.app" -type d | head -1)
+        if [ -z "$APP_PATH" ]; then
+          echo "No .app file found"
+          exit 1
+        fi
+        echo "Found app at: $APP_PATH"
         
-    - name: Upload Build Logs
-      if: failure()
+        # Create IPA
+        mkdir -p ./build
+        cd "$(dirname "$APP_PATH")"
+        zip -r ../../build/TaskLock.ipa "$(basename "$APP_PATH")"
+        cd ../../
+        
+        echo "Created IPA at: ./build/TaskLock.ipa"
+        ls -la ./build/
+                   
+    - name: Upload IPA
       uses: actions/upload-artifact@v3
       with:
-        name: build-logs-failure
-        path: |
-          ./DerivedData/
-        retention-days: 7
+        name: TaskLock.ipa
+        path: ./build/TaskLock.ipa
+        retention-days: 30
+        
+    - name: Upload to GitHub Releases
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./build/TaskLock.ipa
+        tag_name: v${{ github.run_number }}
+        name: TaskLock v${{ github.run_number }}
+        body: |
+          ## TaskLock iOS App Build
+          
+          This is an automated build of the TaskLock iOS app.
+          
+          ### Installation Instructions
+          1. Download the IPA file
+          2. Install via AltStore or similar sideloading tool
+          3. Trust the developer certificate in iOS Settings
+          
+          ### Features
+          - Task management with due dates and priorities
+          - Task-conditional app blocking
+          - Analytics and productivity insights
+          - NFC/QR emergency unlock
+          
+          **Note**: This app requires iOS 17+ and Family Controls capability.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

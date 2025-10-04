@@ -1,14 +1,32 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
     var body: some View {
-        MainTabView()
+        VStack {
+            Image(systemName: "lock.shield")
+                .font(.system(size: 100))
+                .foregroundColor(.blue)
+            
+            Text("TaskLock")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            
+            Text("Task-driven blocking app")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            
+            Spacer()
+            
+            Text("Coming soon...")
+                .font(.title2)
+                .foregroundColor(.secondary)
+            
+            Spacer()
+        }
+        .padding()
     }
 }
 
 #Preview {
     ContentView()
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

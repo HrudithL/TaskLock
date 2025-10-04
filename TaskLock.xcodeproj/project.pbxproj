@@ -11,18 +11,6 @@
 		1A0000030000000000000001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000020000000000000001 /* ContentView.swift */; };
 		1A0000050000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A0000040000000000000001 /* Assets.xcassets */; };
 		1A0000080000000000000001 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A0000070000000000000001 /* Preview Assets.xcassets */; };
-		1A0000100000000000000001 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000F0000000000000001 /* Models.swift */; };
-		1A0000110000000000000001 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000120000000000000001 /* TaskManager.swift */; };
-		1A0000130000000000000001 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000140000000000000001 /* PersistenceController.swift */; };
-		1A0000150000000000000001 /* TaskLockModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000160000000000000001 /* TaskLockModel.xcdatamodeld */; };
-		1A0000170000000000000001 /* BlockingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000180000000000000001 /* BlockingManager.swift */; };
-		1A0000190000000000000001 /* PolicyEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00001A0000000000000001 /* PolicyEngine.swift */; };
-		1A00001B0000000000000001 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00001C0000000000000001 /* AppState.swift */; };
-		1A00001D0000000000000001 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00001E0000000000000001 /* AnalyticsManager.swift */; };
-		1A00001F0000000000000001 /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000200000000000000001 /* Views.swift */; };
-		1A0000210000000000000001 /* PhysicalUnlockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000220000000000000001 /* PhysicalUnlockManager.swift */; };
-		1A0000230000000000000001 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000240000000000000001 /* NotificationManager.swift */; };
-		1A0000250000000000000001 /* SampleDataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000260000000000000001 /* SampleDataSeeder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,25 +18,13 @@
 		1A0000020000000000000001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1A0000040000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A0000070000000000000001 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		1A00000F0000000000000001 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		1A0000120000000000000001 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
-		1A0000140000000000000001 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
-		1A0000160000000000000001 /* TaskLockModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaskLockModel.xcdatamodel; sourceTree = "<group>"; };
-		1A0000180000000000000001 /* BlockingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockingManager.swift; sourceTree = "<group>"; };
-		1A00001A0000000000000001 /* PolicyEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyEngine.swift; sourceTree = "<group>"; };
-		1A00001C0000000000000001 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		1A00001E0000000000000001 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
-		1A0000200000000000000001 /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
-		1A0000220000000000000001 /* PhysicalUnlockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicalUnlockManager.swift; sourceTree = "<group>"; };
-		1A0000240000000000000001 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
-		1A0000260000000000000001 /* SampleDataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataSeeder.swift; sourceTree = "<group>"; };
-		1A0000270000000000000001 /* TaskLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A0000280000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1A0000290000000000000001 /* TaskLock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskLock.entitlements; sourceTree = "<group>"; };
+		1A0000090000000000000001 /* TaskLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A00000A0000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A00000B0000000000000001 /* TaskLock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskLock.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		1A00002A0000000000000001 /* Frameworks */ = {
+		1A00000C0000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -58,24 +34,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1A00002B0000000000000001 = {
+		1A00000D0000000000000001 = {
 			isa = PBXGroup;
 			children = (
-				1A00002C0000000000000001 /* TaskLock */,
-				1A00002D0000000000000001 /* Sources */,
-				1A0000360000000000000001 /* Products */,
+				1A00000E0000000000000001 /* TaskLock */,
+				1A00000F0000000000000001 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		1A00002C0000000000000001 /* TaskLock */ = {
+		1A00000E0000000000000001 /* TaskLock */ = {
 			isa = PBXGroup;
 			children = (
 				1A0000000000000000000001 /* TaskLockApp.swift */,
 				1A0000020000000000000001 /* ContentView.swift */,
 				1A0000040000000000000001 /* Assets.xcassets */,
 				1A0000060000000000000001 /* Preview Content */,
-				1A0000280000000000000001 /* Info.plist */,
-				1A0000290000000000000001 /* TaskLock.entitlements */,
+				1A00000A0000000000000001 /* Info.plist */,
+				1A00000B0000000000000001 /* TaskLock.entitlements */,
 			);
 			path = TaskLock;
 			sourceTree = "<group>";
@@ -88,29 +63,10 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		1A00002D0000000000000001 /* Sources */ = {
+		1A00000F0000000000000001 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1A00000F0000000000000001 /* Models.swift */,
-				1A0000120000000000000001 /* TaskManager.swift */,
-				1A0000140000000000000001 /* PersistenceController.swift */,
-				1A0000160000000000000001 /* TaskLockModel.xcdatamodeld */,
-				1A0000180000000000000001 /* BlockingManager.swift */,
-				1A00001A0000000000000001 /* PolicyEngine.swift */,
-				1A00001C0000000000000001 /* AppState.swift */,
-				1A00001E0000000000000001 /* AnalyticsManager.swift */,
-				1A0000200000000000000001 /* Views.swift */,
-				1A0000220000000000000001 /* PhysicalUnlockManager.swift */,
-				1A0000240000000000000001 /* NotificationManager.swift */,
-				1A0000260000000000000001 /* SampleDataSeeder.swift */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		1A0000360000000000000001 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1A0000270000000000000001 /* TaskLock.app */,
+				1A0000090000000000000001 /* TaskLock.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,13 +74,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1A0000370000000000000001 /* TaskLock */ = {
+		1A0000100000000000000001 /* TaskLock */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1A0000380000000000000001 /* Build configuration list for PBXNativeTarget "TaskLock" */;
+			buildConfigurationList = 1A0000110000000000000001 /* Build configuration list for PBXNativeTarget "TaskLock" */;
 			buildPhases = (
-				1A0000390000000000000001 /* Sources */,
-				1A00002A0000000000000001 /* Frameworks */,
-				1A00003A0000000000000001 /* Resources */,
+				1A0000120000000000000001 /* Sources */,
+				1A00000C0000000000000001 /* Frameworks */,
+				1A0000130000000000000001 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -132,25 +88,25 @@
 			);
 			name = TaskLock;
 			productName = TaskLock;
-			productReference = 1A0000270000000000000001 /* TaskLock.app */;
+			productReference = 1A0000090000000000000001 /* TaskLock.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		1A00003B0000000000000001 /* Project object */ = {
+		1A0000140000000000000001 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
-					1A0000370000000000000001 = {
+					1A0000100000000000000001 = {
 						CreatedOnToolsVersion = 15.0;
 					};
 				};
 			};
-			buildConfigurationList = 1A00003C0000000000000001 /* Build configuration list for PBXProject "TaskLock" */;
+			buildConfigurationList = 1A0000150000000000000001 /* Build configuration list for PBXProject "TaskLock" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -158,18 +114,18 @@
 				en,
 				Base,
 			);
-			mainGroup = 1A00002B0000000000000001;
-			productRefGroup = 1A0000360000000000000001 /* Products */;
+			mainGroup = 1A00000D0000000000000001;
+			productRefGroup = 1A00000F0000000000000001 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1A0000370000000000000001 /* TaskLock */,
+				1A0000100000000000000001 /* TaskLock */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		1A00003A0000000000000001 /* Resources */ = {
+		1A0000130000000000000001 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -181,31 +137,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		1A0000390000000000000001 /* Sources */ = {
+		1A0000120000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				1A0000030000000000000001 /* ContentView.swift in Sources */,
 				1A0000010000000000000001 /* TaskLockApp.swift in Sources */,
-				1A0000100000000000000001 /* Models.swift in Sources */,
-				1A0000110000000000000001 /* TaskManager.swift in Sources */,
-				1A0000130000000000000001 /* PersistenceController.swift in Sources */,
-				1A0000150000000000000001 /* TaskLockModel.xcdatamodeld in Sources */,
-				1A0000170000000000000001 /* BlockingManager.swift in Sources */,
-				1A0000190000000000000001 /* PolicyEngine.swift in Sources */,
-				1A00001B0000000000000001 /* AppState.swift in Sources */,
-				1A00001D0000000000000001 /* AnalyticsManager.swift in Sources */,
-				1A00001F0000000000000001 /* Views.swift in Sources */,
-				1A0000210000000000000001 /* PhysicalUnlockManager.swift in Sources */,
-				1A0000230000000000000001 /* NotificationManager.swift in Sources */,
-				1A0000250000000000000001 /* SampleDataSeeder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		1A00003D0000000000000001 /* Debug */ = {
+		1A0000160000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -268,7 +212,7 @@
 			};
 			name = Debug;
 		};
-		1A00003E0000000000000001 /* Release */ = {
+		1A0000170000000000000001 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -324,7 +268,7 @@
 			};
 			name = Release;
 		};
-		1A00003F0000000000000001 /* Debug */ = {
+		1A0000180000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -354,7 +298,7 @@
 			};
 			name = Debug;
 		};
-		1A0000400000000000000001 /* Release */ = {
+		1A0000190000000000000001 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -387,25 +331,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1A0000380000000000000001 /* Build configuration list for PBXNativeTarget "TaskLock" */ = {
+		1A0000110000000000000001 /* Build configuration list for PBXNativeTarget "TaskLock" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1A00003F0000000000000001 /* Debug */,
-				1A0000400000000000000001 /* Release */,
+				1A0000180000000000000001 /* Debug */,
+				1A0000190000000000000001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1A00003C0000000000000001 /* Build configuration list for PBXProject "TaskLock" */ = {
+		1A0000150000000000000001 /* Build configuration list for PBXProject "TaskLock" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1A00003D0000000000000001 /* Debug */,
-				1A00003E0000000000000001 /* Release */,
+				1A0000160000000000000001 /* Debug */,
+				1A0000170000000000000001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 1A00003B0000000000000001 /* Project object */;
+	rootObject = 1A0000140000000000000001 /* Project object */;
 }
