@@ -76,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A0000480000000000000001 /* SwiftUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +248,7 @@
 			files = (
 				1A0000010000000000000001 /* TaskLockApp.swift in Sources */,
 				1A0000030000000000000001 /* ContentView.swift in Sources */,
+				1A0000200000000000000001 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
