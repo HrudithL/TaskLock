@@ -2,6 +2,12 @@ import Foundation
 import UserNotifications
 import Combine
 
+// MARK: - Notification Extensions
+extension Notification.Name {
+    static let physicalUnlockSuccess = Notification.Name("physicalUnlockSuccess")
+    static let taskCompletedFromNotification = Notification.Name("taskCompletedFromNotification")
+}
+
 // MARK: - Notification Manager
 public class NotificationManager: NSObject, ObservableObject {
     public static let shared = NotificationManager()
