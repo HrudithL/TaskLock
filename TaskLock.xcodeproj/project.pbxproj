@@ -76,8 +76,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A0000460000000000000001 /* UserNotifications.framework in Frameworks */,
-				1A00004C0000000000000001 /* Combine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,9 +247,6 @@
 			files = (
 				1A0000010000000000000001 /* TaskLockApp.swift in Sources */,
 				1A0000030000000000000001 /* ContentView.swift in Sources */,
-				1A0000200000000000000001 /* Models.swift in Sources */,
-				1A0000220000000000000001 /* PersistenceController.swift in Sources */,
-				1A0000260000000000000001 /* NotificationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
