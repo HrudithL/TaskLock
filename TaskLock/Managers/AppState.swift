@@ -1,8 +1,7 @@
 import Foundation
-import Combine
 import SwiftUI
 
-// MARK: - App State
+// MARK: - Simplified AppState
 @MainActor
 public class AppState: ObservableObject {
     @Published public var tasks: [TaskItem] = []
@@ -12,7 +11,7 @@ public class AppState: ObservableObject {
     @Published public var currentBlockingStatus: BlockingStatus = .inactive
     @Published public var isAuthorized: Bool = false
     @Published public var isLoading: Bool = false
-    @Published public var errorMessage: String?
+    @Published public var errorMessage: String? = nil
     @Published public var selectedTab: Int = 0
     @Published public var isBlocking: Bool = false
     
@@ -24,8 +23,6 @@ public class AppState: ObservableObject {
     private let physicalUnlockManager: PhysicalUnlockManager
     private let notificationManager: NotificationManager
     
-    private var cancellables = Set<AnyCancellable>()
-    
     public init() {
         self.persistenceController = PersistenceController.shared
         self.taskManager = TaskManager(dataStore: persistenceController.dataStore)
@@ -35,38 +32,7 @@ public class AppState: ObservableObject {
         self.physicalUnlockManager = PhysicalUnlockManager()
         self.notificationManager = NotificationManager.shared
         
-        setupObservers()
         loadInitialData()
-    }
-    
-    // MARK: - Setup
-    
-    private func setupObservers() {
-        // Observe blocking status changes
-        blockingManager.$currentStatus
-            .assign(to: \.currentBlockingStatus, on: self)
-            .store(in: &cancellables)
-        
-        // Observe authorization status
-        blockingManager.$isAuthorized
-            .assign(to: \.isAuthorized, on: self)
-            .store(in: &cancellables)
-        
-        // Observe physical unlock success
-        NotificationCenter.default.publisher(for: .physicalUnlockSuccess)
-            .sink { [weak self] _ in
-                self?.handlePhysicalUnlock()
-            }
-            .store(in: &cancellables)
-        
-        // Observe task completion from notifications
-        NotificationCenter.default.publisher(for: .taskCompletedFromNotification)
-            .sink { [weak self] notification in
-                if let taskId = notification.object as? String {
-                    self?.handleTaskCompletionFromNotification(taskId: taskId)
-                }
-            }
-            .store(in: &cancellables)
     }
     
     private func loadInitialData() {
@@ -127,7 +93,6 @@ public class AppState: ObservableObject {
         // Request notification authorization
         do {
             try await notificationManager.requestAuthorization()
-            notificationManager.setupNotificationCategories()
         } catch {
             print("Notification authorization failed: \(error)")
         }
@@ -264,20 +229,6 @@ public class AppState: ObservableObject {
     
     public func getCompletedTasks() -> [TaskItem] {
         return taskManager.fetchCompletedTasks()
-    }
-    
-    // MARK: - Event Handlers
-    
-    private func handlePhysicalUnlock() {
-        // Handle successful physical unlock
-        emergencyUnlock()
-    }
-    
-    private func handleTaskCompletionFromNotification(taskId: String) {
-        // Find and complete the task
-        if let task = tasks.first(where: { $0.id.uuidString == taskId }) {
-            completeTask(task)
-        }
     }
     
     // MARK: - Refresh Data

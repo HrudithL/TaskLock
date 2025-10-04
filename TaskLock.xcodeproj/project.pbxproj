@@ -76,7 +76,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A0000400000000000000001 /* FamilyControls.framework in Frameworks */,
+				1A0000420000000000000001 /* ManagedSettings.framework in Frameworks */,
+				1A0000440000000000000001 /* DeviceActivity.framework in Frameworks */,
+				1A0000460000000000000001 /* UserNotifications.framework in Frameworks */,
 				1A0000480000000000000001 /* SwiftUI.framework in Frameworks */,
+				1A00004A0000000000000001 /* Charts.framework in Frameworks */,
+				1A00004C0000000000000001 /* Combine.framework in Frameworks */,
+				1A00004E0000000000000001 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +256,21 @@
 				1A0000010000000000000001 /* TaskLockApp.swift in Sources */,
 				1A0000030000000000000001 /* ContentView.swift in Sources */,
 				1A0000200000000000000001 /* Models.swift in Sources */,
+				1A0000220000000000000001 /* PersistenceController.swift in Sources */,
+				1A0000240000000000000001 /* TaskManager.swift in Sources */,
+				1A0000260000000000000001 /* NotificationManager.swift in Sources */,
+				1A0000280000000000000001 /* BlockingManager.swift in Sources */,
+				1A00002A0000000000000001 /* PolicyEngine.swift in Sources */,
+				1A00002C0000000000000001 /* AnalyticsManager.swift in Sources */,
+				1A00002E0000000000000001 /* PhysicalUnlockManager.swift in Sources */,
+				1A0000300000000000000001 /* AppState.swift in Sources */,
+				1A0000320000000000000001 /* MainTabView.swift in Sources */,
+				1A0000340000000000000001 /* TaskViews.swift in Sources */,
+				1A0000360000000000000001 /* AddEditTaskViews.swift in Sources */,
+				1A0000380000000000000001 /* CategoryViews.swift in Sources */,
+				1A00003A0000000000000001 /* AnalyticsViews.swift in Sources */,
+				1A00003C0000000000000001 /* SettingsViews.swift in Sources */,
+				1A00003E0000000000000001 /* BlockingOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
