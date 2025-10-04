@@ -3,7 +3,7 @@ import SwiftUI
 
 // MARK: - Simple Data Store
 public class SimpleDataStore: ObservableObject {
-    @Published public var tasks: [Task] = []
+    @Published public var tasks: [TaskItem] = []
     @Published public var categories: [Category] = []
     @Published public var presets: [TaskPreset] = []
     @Published public var dailyAggregates: [DailyAggregate] = []
@@ -31,9 +31,9 @@ public class SimpleDataStore: ObservableObject {
         
         // Create some sample tasks
         tasks = [
-            Task(title: "Complete project proposal", notes: "Finish the quarterly project proposal", dueDate: Calendar.current.date(byAdding: .day, value: 1, to: Date()), priority: .high, estimateMinutes: 120, categoryName: "Work"),
-            Task(title: "Grocery shopping", notes: "Buy ingredients for dinner", dueDate: Date(), priority: .medium, estimateMinutes: 30, categoryName: "Personal"),
-            Task(title: "Study for exam", notes: "Review chapters 5-8", dueDate: Calendar.current.date(byAdding: .day, value: 3, to: Date()), priority: .high, estimateMinutes: 180, categoryName: "School")
+            TaskItem(title: "Complete project proposal", notes: "Finish the quarterly project proposal", dueDate: Calendar.current.date(byAdding: .day, value: 1, to: Date()), priority: .high, estimateMinutes: 120, categoryName: "Work"),
+            TaskItem(title: "Grocery shopping", notes: "Buy ingredients for dinner", dueDate: Date(), priority: .medium, estimateMinutes: 30, categoryName: "Personal"),
+            TaskItem(title: "Study for exam", notes: "Review chapters 5-8", dueDate: Calendar.current.date(byAdding: .day, value: 3, to: Date()), priority: .high, estimateMinutes: 180, categoryName: "School")
         ]
     }
     

@@ -20,8 +20,8 @@ public class TaskManager: ObservableObject {
         category: Category? = nil,
         priority: TaskPriority = .medium,
         estimateMinutes: Int32 = 30
-    ) -> Task {
-        let task = Task(
+    ) -> TaskItem {
+        let task = TaskItem(
             title: title,
             notes: notes,
             dueDate: dueDate,
@@ -39,7 +39,7 @@ public class TaskManager: ObservableObject {
         return task
     }
     
-    public func updateTask(_ task: Task) {
+    public func updateTask(_ task: TaskItem) {
         if let index = dataStore.tasks.firstIndex(where: { $0.id == task.id }) {
             var updatedTask = task
             updatedTask.updatedAt = Date()
@@ -52,7 +52,7 @@ public class TaskManager: ObservableObject {
         }
     }
     
-    public func completeTask(_ task: Task) {
+    public func completeTask(_ task: TaskItem) {
         if let index = dataStore.tasks.firstIndex(where: { $0.id == task.id }) {
             var completedTask = task
             completedTask.isCompleted = true
@@ -68,7 +68,7 @@ public class TaskManager: ObservableObject {
         }
     }
     
-    public func deleteTask(_ task: Task) {
+    public func deleteTask(_ task: TaskItem) {
         // Cancel notifications
         cancelNotifications(for: task)
         
@@ -78,7 +78,7 @@ public class TaskManager: ObservableObject {
     
     // MARK: - Fetch Requests
     
-    public func fetchTasks(predicate: ((Task) -> Bool)? = nil, sortDescriptors: [((Task, Task) -> Bool)] = []) -> [Task] {
+    public func fetchTasks(predicate: ((TaskItem) -> Bool)? = nil, sortDescriptors: [((TaskItem, TaskItem) -> Bool)] = []) -> [TaskItem] {
         var tasks = dataStore.tasks
         
         if let predicate = predicate {
@@ -106,31 +106,31 @@ public class TaskManager: ObservableObject {
         return tasks
     }
     
-    public func fetchTasksDueToday() -> [Task] {
+    public func fetchTasksDueToday() -> [TaskItem] {
         return fetchTasks { task in
             task.isDueToday
         }
     }
     
-    public func fetchOverdueTasks() -> [Task] {
+    public func fetchOverdueTasks() -> [TaskItem] {
         return fetchTasks { task in
             task.isOverdue
         }
     }
     
-    public func fetchActiveTasks() -> [Task] {
+    public func fetchActiveTasks() -> [TaskItem] {
         return fetchTasks { task in
             task.isActive
         }
     }
     
-    public func fetchTasksByCategory(_ category: Category) -> [Task] {
+    public func fetchTasksByCategory(_ category: Category) -> [TaskItem] {
         return fetchTasks { task in
             task.categoryName == category.name
         }
     }
     
-    public func fetchCompletedTasks() -> [Task] {
+    public func fetchCompletedTasks() -> [TaskItem] {
         return fetchTasks { task in
             task.isCompleted
         }
@@ -208,20 +208,20 @@ public class TaskManager: ObservableObject {
     
     // MARK: - Notification Management
     
-    private func scheduleNotifications(for task: Task) {
+    private func scheduleNotifications(for task: TaskItem) {
         guard !task.isCompleted else { return }
         
         // For now, we'll skip reminders since we removed the reminders array
         // This can be implemented later with a separate Reminder entity if needed
     }
     
-    private func cancelNotifications(for task: Task) {
+    private func cancelNotifications(for task: TaskItem) {
         notificationManager.cancelTaskNotifications(taskId: task.id.uuidString)
     }
     
     // MARK: - Analytics
     
-    private func updateDailyAggregate(for task: Task) {
+    private func updateDailyAggregate(for task: TaskItem) {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         

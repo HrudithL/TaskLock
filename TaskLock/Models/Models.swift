@@ -24,8 +24,8 @@ public enum TaskPriority: String, CaseIterable, Codable {
     }
 }
 
-// MARK: - Task Model
-public struct Task: Identifiable, Hashable {
+// MARK: - TaskItem Model (renamed to avoid conflict with Swift's Task)
+public struct TaskItem: Identifiable, Hashable {
     public let id: UUID
     public var title: String
     public var notes: String?

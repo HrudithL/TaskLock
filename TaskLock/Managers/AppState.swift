@@ -5,7 +5,7 @@ import SwiftUI
 // MARK: - App State
 @MainActor
 public class AppState: ObservableObject {
-    @Published public var tasks: [Task] = []
+    @Published public var tasks: [TaskItem] = []
     @Published public var categories: [Category] = []
     @Published public var presets: [TaskPreset] = []
     @Published public var blockingProfiles: [BlockingProfile] = []

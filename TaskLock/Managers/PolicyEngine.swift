@@ -6,10 +6,10 @@ public struct PolicyDecision {
     public let shouldBlock: Bool
     public let profile: BlockingProfile?
     public let reason: String
-    public let triggeringTasks: [Task]
+    public let triggeringTasks: [TaskItem]
     public let gracePeriodEnds: Date?
     
-    public init(shouldBlock: Bool, profile: BlockingProfile? = nil, reason: String, triggeringTasks: [Task] = [], gracePeriodEnds: Date? = nil) {
+    public init(shouldBlock: Bool, profile: BlockingProfile? = nil, reason: String, triggeringTasks: [TaskItem] = [], gracePeriodEnds: Date? = nil) {
         self.shouldBlock = shouldBlock
         self.profile = profile
         self.reason = reason
@@ -114,7 +114,7 @@ public class PolicyEngine: ObservableObject {
     
     // MARK: - Task Filtering
     
-    private func getTasksForCondition() -> [Task] {
+    private func getTasksForCondition() -> [TaskItem] {
         switch configuration.conditionType {
         case .dueTodayOrOverdue:
             return taskManager.fetchActiveTasks()
@@ -129,7 +129,7 @@ public class PolicyEngine: ObservableObject {
         }
     }
     
-    private func filterTasksByCompletionPolicy(_ tasks: [Task]) -> [Task] {
+    private func filterTasksByCompletionPolicy(_ tasks: [TaskItem]) -> [TaskItem] {
         switch configuration.completionPolicy {
         case .allTasks:
             return tasks

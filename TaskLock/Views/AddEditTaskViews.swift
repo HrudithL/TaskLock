@@ -123,7 +123,7 @@ struct AddTaskView: View {
 
 // MARK: - Edit Task View
 struct EditTaskView: View {
-    var task: Task
+    var task: TaskItem
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) private var dismiss
     
