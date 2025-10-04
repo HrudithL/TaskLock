@@ -1,5 +1,4 @@
 import SwiftUI
-import AppUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext

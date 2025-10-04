@@ -20,14 +20,6 @@ jobs:
       with:
         xcode-version: latest-stable
         
-    - name: Cache Swift Package Manager
-      uses: actions/cache@v3
-      with:
-        path: .build
-        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-        restore-keys: |
-          ${{ runner.os }}-spm-
-          
     - name: Cache DerivedData
       uses: actions/cache@v3
       with:
@@ -36,107 +28,84 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-deriveddata-
           
-    - name: Install Apple Certificate
-      env:
-        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-        P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-        KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+    - name: List project files
       run: |
-        # Create variables
-        CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-        KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+        echo "Project structure:"
+        find . -name "*.xcodeproj" -o -name "*.swift" -o -name "*.plist" | head -20
         
-        # Import certificate from secrets
-        echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
-        
-        # Create temporary keychain
-        security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-        security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-        security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-        
-        # Import certificate to keychain
-        security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-        security list-keychain -d user -s $KEYCHAIN_PATH
-        
-        # Apply certificate
-        security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-        
-    - name: Install Provisioning Profile
-      env:
-        PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+    - name: Build for Simulator (No Code Signing)
       run: |
-        PROVISIONING_PROFILE_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-        echo -n "$PROVISIONING_PROFILE_BASE64" | base64 --decode --output $PROVISIONING_PROFILE_PATH
-        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-        cp $PROVISIONING_PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
-        
-    - name: Build and Archive
-      env:
-        DEVELOPMENT_TEAM: ${{ secrets.DEVELOPMENT_TEAM }}
-        CODE_SIGN_IDENTITY: ${{ secrets.CODE_SIGN_IDENTITY }}
-        PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}
+        # Build for iOS Simulator first to test compilation
+        xcodebuild -project TaskLock.xcodeproj \
+                   -scheme TaskLock \
+                   -configuration Debug \
+                   -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+                   -derivedDataPath ./DerivedData \
+                   build
+                   
+    - name: Build for Device (No Code Signing)
       run: |
-        # Build the project
+        # Build for device without code signing
         xcodebuild -project TaskLock.xcodeproj \
                    -scheme TaskLock \
                    -configuration Release \
                    -destination 'generic/platform=iOS' \
-                   -archivePath $RUNNER_TEMP/TaskLock.xcarchive \
-                   DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
-                   CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
-                   PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_SPECIFIER" \
-                   archive
+                   -derivedDataPath ./DerivedData \
+                   CODE_SIGNING_ALLOWED=NO \
+                   build
                    
-    - name: Export IPA
+    - name: Create IPA (No Code Signing)
       run: |
-        # Create export options plist
-        cat > $RUNNER_TEMP/ExportOptions.plist << EOF
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
-            <key>method</key>
-            <string>development</string>
-            <key>teamID</key>
-            <string>${{ secrets.DEVELOPMENT_TEAM }}</string>
-            <key>uploadBitcode</key>
-            <false/>
-            <key>uploadSymbols</key>
-            <true/>
-            <key>compileBitcode</key>
-            <false/>
-        </dict>
-        </plist>
-        EOF
+        # Create IPA without code signing for testing
+        mkdir -p ./build
         
-        # Export IPA
-        xcodebuild -exportArchive \
-                   -archivePath $RUNNER_TEMP/TaskLock.xcarchive \
-                   -exportPath $RUNNER_TEMP/export \
-                   -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist
+        # Find the built app
+        APP_PATH=$(find ./DerivedData -name "*.app" -type d | head -1)
+        
+        if [ -z "$APP_PATH" ]; then
+          echo "No .app file found"
+          find ./DerivedData -type d -name "*.app"
+          exit 1
+        fi
+        
+        echo "Found app at: $APP_PATH"
+        
+        # Create IPA
+        cd "$(dirname "$APP_PATH")"
+        zip -r ../../build/TaskLock-unsigned.ipa "$(basename "$APP_PATH")"
+        cd ../../
+        
+        echo "Created unsigned IPA at: ./build/TaskLock-unsigned.ipa"
+        ls -la ./build/
                    
-    - name: Upload IPA
+    - name: Upload Build Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: TaskLock.ipa
-        path: ${{ runner.temp }}/export/TaskLock.ipa
+        name: TaskLock-unsigned-build
+        path: |
+          ./build/
+          ./DerivedData/Build/Products/Release-iphoneos/
+        retention-days: 30
         
     - name: Upload to GitHub Releases
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       uses: softprops/action-gh-release@v1
       with:
-        files: ${{ runner.temp }}/export/TaskLock.ipa
+        files: ./build/TaskLock-unsigned.ipa
         tag_name: v${{ github.run_number }}
-        name: TaskLock v${{ github.run_number }}
+        name: TaskLock v${{ github.run_number }} (Unsigned)
         body: |
-          ## TaskLock iOS App Build
+          ## TaskLock iOS App Build (Unsigned)
           
-          This is an automated build of the TaskLock iOS app.
+          This is an automated build of the TaskLock iOS app without code signing.
           
           ### Installation Instructions
-          1. Download the IPA file
-          2. Install via AltStore or similar sideloading tool
-          3. Trust the developer certificate in iOS Settings
+          1. Download the unsigned IPA file
+          2. Sign it with your own certificate using tools like:
+             - AltStore
+             - Sideloadly
+             - Xcode (for development)
+          3. Install on your device
           
           ### Features
           - Task management with due dates and priorities
@@ -145,7 +114,8 @@ jobs:
           - NFC/QR emergency unlock
           
           **Note**: This app requires iOS 17+ and Family Controls capability.
+          **Warning**: This is an unsigned build for development/testing only.
         draft: false
-        prerelease: false
+        prerelease: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
