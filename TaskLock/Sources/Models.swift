@@ -1,6 +1,5 @@
 import Foundation
 import CoreData
-import UserNotifications
 
 // MARK: - Task Priority Enum
 public enum TaskPriority: String, CaseIterable, Codable {

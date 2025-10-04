@@ -5,7 +5,6 @@ import UserNotifications
 // MARK: - Task Manager
 public class TaskManager: ObservableObject {
     private let persistenceController: PersistenceController
-    private let notificationCenter = UNUserNotificationCenter.current()
     
     public init(persistenceController: PersistenceController) {
         self.persistenceController = persistenceController
@@ -38,26 +37,21 @@ public class TaskManager: ObservableObject {
         task.updatedAt = Date()
         
         saveContext()
-        scheduleReminders(for: task)
-        
         return task
     }
     
     public func updateTask(_ task: Task) {
         task.updatedAt = Date()
         saveContext()
-        scheduleReminders(for: task)
     }
     
     public func completeTask(_ task: Task) {
         task.isCompleted = true
         task.updatedAt = Date()
         saveContext()
-        cancelReminders(for: task)
     }
     
     public func deleteTask(_ task: Task) {
-        cancelReminders(for: task)
         persistenceController.container.viewContext.delete(task)
         saveContext()
     }
@@ -179,42 +173,6 @@ public class TaskManager: ObservableObject {
     public func deletePreset(_ preset: TaskPreset) {
         persistenceController.container.viewContext.delete(preset)
         saveContext()
-    }
-    
-    // MARK: - Reminder Management
-    
-    private func scheduleReminders(for task: Task) {
-        cancelReminders(for: task)
-        
-        for (index, reminderDate) in task.reminders.enumerated() {
-            let content = UNMutableNotificationContent()
-            content.title = "Task Reminder"
-            content.body = task.title
-            content.sound = .default
-            content.userInfo = ["taskId": task.id.uuidString]
-            
-            let trigger = UNCalendarNotificationTrigger(
-                dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate),
-                repeats: false
-            )
-            
-            let request = UNNotificationRequest(
-                identifier: "\(task.id.uuidString)-\(index)",
-                content: content,
-                trigger: trigger
-            )
-            
-            notificationCenter.add(request) { error in
-                if let error = error {
-                    print("Error scheduling reminder: \(error)")
-                }
-            }
-        }
-    }
-    
-    private func cancelReminders(for task: Task) {
-        let identifiers = task.reminders.enumerated().map { "\(task.id.uuidString)-\($0.offset)" }
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
     
     // MARK: - Helper Methods
