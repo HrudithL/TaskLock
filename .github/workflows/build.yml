@@ -20,21 +20,26 @@ jobs:
       with:
         xcode-version: latest-stable
         
-    - name: List project contents
+    - name: Show project structure
       run: |
-        echo "=== Project Structure ==="
-        find . -type f -name "*.swift" | head -10
-        echo "=== Xcode Project ==="
-        ls -la *.xcodeproj/
+        echo "=== Project Root ==="
+        ls -la
         echo "=== TaskLock Directory ==="
         ls -la TaskLock/
         echo "=== Sources Directory ==="
-        ls -la TaskLock/Sources/ || echo "Sources directory not found"
+        ls -la TaskLock/Sources/
+        echo "=== Xcode Project ==="
+        ls -la TaskLock.xcodeproj/
         
     - name: Validate Xcode Project
       run: |
         echo "=== Validating Xcode Project ==="
         xcodebuild -list -project TaskLock.xcodeproj
+        
+    - name: Check Swift files for syntax errors
+      run: |
+        echo "=== Checking Swift files ==="
+        find TaskLock/Sources -name "*.swift" -exec echo "Checking: {}" \; -exec swiftc -parse {} \;
         
     - name: Build for Simulator (Debug)
       run: |
@@ -44,20 +49,29 @@ jobs:
                    -configuration Debug \
                    -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
                    -derivedDataPath ./DerivedData \
-                   clean build
+                   clean build \
+                   CODE_SIGNING_ALLOWED=NO
                    
     - name: Check build output
       run: |
         echo "=== Build Output ==="
         find ./DerivedData -name "*.app" -type d || echo "No .app files found"
-        find ./DerivedData -name "*.dSYM" -type d || echo "No .dSYM files found"
         ls -la ./DerivedData/Build/Products/Debug-iphonesimulator/ || echo "Debug products directory not found"
+        
+    - name: Upload Build Artifacts
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: TaskLock-build-success
+        path: |
+          ./DerivedData/Build/Products/Debug-iphonesimulator/
+        retention-days: 7
         
     - name: Upload Build Logs
       if: failure()
       uses: actions/upload-artifact@v3
       with:
-        name: build-logs
+        name: build-logs-failure
         path: |
           ./DerivedData/
         retention-days: 7
